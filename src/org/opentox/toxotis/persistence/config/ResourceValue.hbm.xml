@@ -10,10 +10,11 @@
         optimistic-lock="version"
         polymorphism="implicit"
         select-before-update="false">
-            <composite-id>
-                <key-property name="uri" column="URI" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
-                <key-property name="ontologicalClass" column="CLASS" type="org.opentox.toxotis.persistence.usertypes.OntologicalClassUserType"/>
-            </composite-id>
+        <id column="rsId" type="int">
+            <generator class="native"/>
+        </id>
+        <property name="uri" column="URI" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
+        <property name="ontologicalClass" column="CLASS" type="org.opentox.toxotis.persistence.usertypes.OntologicalClassUserType"/>
     </class>
 
 </hibernate-mapping>

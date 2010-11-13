@@ -24,13 +24,12 @@
             </many-to-many>
         </set>
 
-        <!--<set name="titles" cascade="all-delete-orphan" table="MiTitles">
+        <set name="titles" cascade="all-delete-orphan" table="MiTitles">
             <key>
                 <column name="idx"/>
             </key>
             <many-to-many class="org.opentox.toxotis.ontology.LiteralValue">
-                <column name="valueAsString"/>
-                <column name="type"/>
+                <column name="litId"/>
             </many-to-many>
         </set>
         <set name="descriptions" cascade="all-delete-orphan" table="MiDesc">
@@ -38,8 +37,7 @@
                 <column name="idx"/>
             </key>
             <many-to-many class="org.opentox.toxotis.ontology.LiteralValue">
-                <column name="valueAsString"/>
-                <column name="type"/>
+                <column name="litId"/>
             </many-to-many>
         </set>
         <set name="identifiers" cascade="all-delete-orphan" table="MiIDs">
@@ -47,8 +45,7 @@
                 <column name="idx"/>
             </key>
             <many-to-many class="org.opentox.toxotis.ontology.LiteralValue">
-                <column name="valueAsString"/>
-                <column name="type"/>
+                <column name="litId"/>
             </many-to-many>
         </set>
         <set name="subjects" cascade="all-delete-orphan" table="MiSubjects">
@@ -56,8 +53,7 @@
                 <column name="idx"/>
             </key>
             <many-to-many class="org.opentox.toxotis.ontology.LiteralValue">
-                <column name="valueAsString"/>
-                <column name="type"/>
+                <column name="litId"/>
             </many-to-many>
         </set>
         <set name="publishers" cascade="all-delete-orphan" table="MiPublishers">
@@ -65,8 +61,7 @@
                 <column name="idx"/>
             </key>
             <many-to-many class="org.opentox.toxotis.ontology.LiteralValue">
-                <column name="valueAsString"/>
-                <column name="type"/>
+                <column name="litId"/>
             </many-to-many>
         </set>
         <set name="creators" cascade="all-delete-orphan" table="MiCreators">
@@ -74,8 +69,7 @@
                 <column name="idx"/>
             </key>
             <many-to-many class="org.opentox.toxotis.ontology.LiteralValue">
-                <column name="valueAsString"/>
-                <column name="type"/>
+                <column name="litId"/>
             </many-to-many>
         </set>
         <set name="contributors" cascade="all-delete-orphan" table="MiContributors">
@@ -83,8 +77,7 @@
                 <column name="idx"/>
             </key>
             <many-to-many class="org.opentox.toxotis.ontology.LiteralValue">
-                <column name="valueAsString"/>
-                <column name="type"/>
+                <column name="litId"/>
             </many-to-many>
         </set>
         <set name="audiences" cascade="all-delete-orphan" table="MiAud">
@@ -92,17 +85,15 @@
                 <column name="idx"/>
             </key>
             <many-to-many class="org.opentox.toxotis.ontology.LiteralValue">
-                <column name="valueAsString"/>
-                <column name="type"/>
+                <column name="litId"/>
             </many-to-many>
-        </set>
+        </set>        
         <set name="hasSources" cascade="all-delete-orphan" table="MiSources">
             <key>
                 <column name="idx"/>
             </key>
             <many-to-many class="org.opentox.toxotis.ontology.ResourceValue">
-                <column name="uri"/>
-                <column name="ontologicalClass"/>
+                <column name="rsId"/>
             </many-to-many>
         </set>
         <set name="seeAlso" cascade="all-delete-orphan" table="MiSeeAlso">
@@ -110,8 +101,7 @@
                 <column name="idx"/>
             </key>
             <many-to-many class="org.opentox.toxotis.ontology.ResourceValue">
-                <column name="uri"/>
-                <column name="ontologicalClass"/>
+                <column name="rsId"/>
             </many-to-many>
         </set>
         <set name="sameAs" cascade="all-delete-orphan" table="MiSameAs">
@@ -119,15 +109,13 @@
                 <column name="idx"/>
             </key>
             <many-to-many class="org.opentox.toxotis.ontology.ResourceValue">
-                <column name="uri"/>
-                <column name="ontologicalClass"/>
+                <column name="rsId"/>
             </many-to-many>
         </set>
         <many-to-one name="date" cascade="all" >
-            <column name="date"/>
-            <column name="dateType"/>
+            <column name="rsId"/>
         </many-to-one>
--->
+
     </class>
 
     <subclass name="org.opentox.toxotis.ontology.impl.MetaInfoImpl" extends="org.opentox.toxotis.ontology.MetaInfo" discriminator-value="MetaInfoImpl"/>

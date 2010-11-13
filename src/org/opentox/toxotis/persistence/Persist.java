@@ -29,7 +29,7 @@ public class Persist {
         m1.addComment(lv);
         m1.addSameAs(new ResourceValue(Services.ambitUniPlovdiv(), OTClasses.Compound()));
         m1.addTitle("--");
-        m1.addDescription("      .");
+        m1.addDescription("  .");
         LiteralValue ll =new LiteralValue(new Date(System.currentTimeMillis()), XSDDatatype.XSDdate);
         m1.setDate(ll);
         m1.addSameAs(new ResourceValue(Services.ideaconsult(), OTClasses.Compound()));
