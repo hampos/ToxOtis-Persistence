@@ -322,12 +322,19 @@ public class BibTeX extends OTPublishable<BibTeX> {
         return this;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
+        if (m_number == null) {
+            return null;
+        }
         return Integer.parseInt(m_number);
     }
 
-    public BibTeX setNumber(int number) {
-        this.m_number = Integer.toString(number);
+    public BibTeX setNumber(Integer number) {
+        if (number==null || (number!=null && number < 0)) {
+            this.m_number = null;
+        } else {
+            this.m_number = Integer.toString(number);
+        }
         return this;
     }
 
@@ -340,21 +347,35 @@ public class BibTeX extends OTPublishable<BibTeX> {
         return this;
     }
 
-    public int getVolume() {
+    public Integer getVolume() {
+        if (m_volume == null) {
+            return null;
+        }
         return Integer.parseInt(m_volume);
     }
 
-    public BibTeX setVolume(int volume) {
-        this.m_volume = Integer.toString(volume);
+    public BibTeX setVolume(Integer volume) {
+        if ( volume == null || (volume!=null && volume < 0)) {
+            this.m_volume = null;
+        } else {
+            this.m_volume = Integer.toString(volume);
+        }
         return this;
     }
 
-    public int getYear() {
+    public Integer getYear() {
+        if (m_year == null) {
+            return null;
+        }
         return Integer.parseInt(m_year);
     }
 
-    public BibTeX setYear(int year) {
-        this.m_year = Integer.toString(year);
+    public BibTeX setYear(Integer year) {
+        if (year < 0 || year == null) {
+            this.m_year = null;
+        } else {
+            this.m_year = Integer.toString(year);
+        }
         return this;
     }
 
@@ -702,7 +723,7 @@ public class BibTeX extends OTPublishable<BibTeX> {
     }
 
     public BibTeX readString(File bibFile) throws ToxOtisException {
-        if (bibFile==null){
+        if (bibFile == null) {
             throw new NullPointerException("BibFile cannot be null!");
         }
         FileInputStream fis = null;

@@ -1,5 +1,6 @@
 package org.opentox.toxotis.client;
 
+import java.io.Serializable;
 import org.opentox.toxotis.core.component.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -27,7 +28,7 @@ import org.opentox.toxotis.util.aa.AuthenticationToken;
  * @author Pantelis Sopasakis
  * @author Charalampos Chomenides
  */
-public class VRI { // Well tested!
+public class VRI implements Serializable { // Well tested!
 
     /** The URI as a string */
     private String uri;
