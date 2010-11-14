@@ -13,7 +13,8 @@
     <!-- JDBC connection pool (use the built-in) -->
     <property name="connection.pool_size">5</property>
     <!-- SQL dialect -->
-    <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+    <!--<property name="dialect">org.hibernate.dialect.MySQLDialect</property> -->
+    <property name="dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
     <!-- Enable Hibernate's automatic session context management -->
     <property name="current_session_context_class">thread</property>
     <!-- Disable the second-level cache  -->
@@ -24,7 +25,8 @@
     <property name="hbm2ddl.auto">update</property>
     <mapping resource="org/opentox/toxotis/persistence/config/LiteralValueMapping.hbm.xml"/>
     <mapping resource="org/opentox/toxotis/persistence/config/ResourceValue.hbm.xml"/>
-    <mapping resource="org/opentox/toxotis/persistence/config/MetaInfoMapping.hbm.xml"/>
-    <mapping resource="org/opentox/toxotis/persistence/config/BibTeXMapping.hbm.xml"/>
+    <mapping resource="org/opentox/toxotis/persistence/config/MetaInfoMapping.hbm.xml"/>    
+    <mapping resource="org/opentox/toxotis/persistence/config/OTComponentMapping.hbm.xml"/>
+    <!--<mapping resource="org/opentox/toxotis/persistence/config/BibTeXMapping.hbm.xml"/>-->
   </session-factory>
 </hibernate-configuration>

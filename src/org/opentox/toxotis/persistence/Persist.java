@@ -46,9 +46,10 @@ public class Persist {
         metaInfoToSave.addSameAs(new ResourceValue(Services.ideaconsult(), OTClasses.Compound()));
 
         BibTeX oc = new BibTeX(Services.ntua().augment("bibtex", "3"));
-        oc.setBibType(BibTeX.BIB_TYPE.Article);
+        oc.setBibType(BibTeX.BIB_TYPE.Book);
         oc.setAddress("addr");
         oc.setMeta(metaInfoToSave);
+        oc.setVolume(2);
 
 
         try {
