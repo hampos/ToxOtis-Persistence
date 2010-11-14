@@ -40,11 +40,13 @@ public class Persist {
         metaInfoToSave.addSameAs(new ResourceValue(Services.ambitUniPlovdiv(), OTClasses.Compound()));
         metaInfoToSave.addTitle("some title goes here!");
         metaInfoToSave.addDescription("brief description");
+        metaInfoToSave.addDescription("brief description 2");
         LiteralValue ll = new LiteralValue(new Date(System.currentTimeMillis()), XSDDatatype.XSDdate);
         metaInfoToSave.setDate(ll);
         metaInfoToSave.addSameAs(new ResourceValue(Services.ideaconsult(), OTClasses.Compound()));
 
-        BibTeX oc = new BibTeX(Services.ntua().augment("bibtex", "2"));
+        BibTeX oc = new BibTeX(Services.ntua().augment("bibtex", "3"));
+        oc.setBibType(BibTeX.BIB_TYPE.Article);
         oc.setAddress("addr");
         oc.setMeta(metaInfoToSave);
 
@@ -54,7 +56,7 @@ public class Persist {
             session.saveOrUpdate(oc);
             session.getTransaction().commit();
         } catch (ConstraintViolationException ex) {
-            System.out.println("[EXCEPT] Attempt to violate a PK constraint");
+            System.out.println("[EXCEPT] Attempt to violate a constraint");
         } finally {
             session.close();
         }
