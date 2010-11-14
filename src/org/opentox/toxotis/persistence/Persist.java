@@ -1,19 +1,17 @@
 package org.opentox.toxotis.persistence;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.exception.ConstraintViolationException;
+import org.opentox.toxotis.client.VRI;
 import org.opentox.toxotis.client.collection.Services;
-import org.opentox.toxotis.core.OTComponent;
-import org.opentox.toxotis.core.component.Algorithm;
 import org.opentox.toxotis.core.component.BibTeX;
+import org.opentox.toxotis.core.component.ErrorReport;
 import org.opentox.toxotis.ontology.LiteralValue;
 import org.opentox.toxotis.ontology.MetaInfo;
 import org.opentox.toxotis.ontology.ResourceValue;
@@ -32,8 +30,6 @@ public class Persist {
         SessionFactory sf = HibernateUtil.getSessionFactory();
         Session session = sf.openSession();
 
-
-
         MetaInfoImpl metaInfoToSave = new MetaInfoImpl();
         LiteralValue literal = new LiteralValue(new Double(93.24));
         metaInfoToSave.addComment(literal);
@@ -45,11 +41,23 @@ public class Persist {
         metaInfoToSave.setDate(ll);
         metaInfoToSave.addSameAs(new ResourceValue(Services.ideaconsult(), OTClasses.Compound()));
 
-        BibTeX oc = new BibTeX(Services.ntua().augment("bibtex", "3"));
-        oc.setBibType(BibTeX.BIB_TYPE.Book);
-        oc.setAddress("addr");
+        ErrorReport other = new ErrorReport();
+        other.setActor("someone else");
+        other.setDetails("(#(#*(*W(&$#@*^*&@%%#$^#(");
+        other.setErrorCode("254");
+        other.setHttpStatus(400);
+        other.setMessage("short message 2dfjshg");
+
+
+
+        ErrorReport oc = new ErrorReport();
+        oc.setActor("me");
+        oc.setDetails("sdjghkrjhg kjsfkjhsrkjg ");
+        oc.setErrorCode("4");
+        oc.setHttpStatus(342);
+        oc.setMessage("short message");
+        //oc.setErrorCause(other);
         oc.setMeta(metaInfoToSave);
-        oc.setVolume(2);
 
 
         try {
@@ -78,8 +86,6 @@ public class Persist {
                 e.printStackTrace();
             }
         }
-
-
 
     }
 }

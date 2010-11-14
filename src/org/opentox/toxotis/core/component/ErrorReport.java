@@ -4,6 +4,7 @@ import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
 import java.net.URISyntaxException;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
@@ -42,6 +43,20 @@ public class ErrorReport extends OTComponent<ErrorReport> {
     private ErrorReport errorCause;
 
     public ErrorReport() {
+    }
+
+    @Override
+    public VRI getUri() {
+        VRI superUri = super.getUri();
+        if (superUri == null) {
+            try {
+                superUri = new VRI("http://anonymous/errorReport/" + UUID.randomUUID().toString());
+                setUri(superUri);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(ErrorReport.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return superUri;
     }
 
     public String getActor() {
