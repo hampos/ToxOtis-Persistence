@@ -2,11 +2,15 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
     <class
-        dynamic-insert="true"
-        dynamic-update="true"
         name="org.opentox.toxotis.core.OTComponent"
+        dynamic-insert="true"
+        dynamic-update="true"        
         select-before-update="false"
-        discriminator-value="OTComp">
+        discriminator-value="OTComp"
+        polymorphism="implicit"
+        optimistic-lock="version"
+        mutable="true">
+
         <id name="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
         <!--
                 Foreign (M2O) key pointing to MetaInformation
@@ -17,6 +21,7 @@
 
         <joined-subclass
             name="org.opentox.toxotis.core.component.BibTeX">
+
 
             <key column="uri"/>
 
@@ -32,6 +37,9 @@
             <property name="bookTitle"/>
             <property name="chapter"/>
             <property name="copyright"/>
+            <!-- READ http://docs.jboss.org/tools/2.1.0.Beta1/hibernatetools/html_single/#d0e4159
+                 for further information about the tag <meta>.
+                 -->
             <property name="crossref">
                 <meta  attribute="field-description">
                     Reference to some other BibTeX entry possible providing its URI of other (global) identifier.
@@ -52,6 +60,10 @@
             <property name="volume"/>
             <property name="year"/>
         </joined-subclass>
+
+        <!--<joined-subclass name="">
+
+        </joined-subclass>-->
 
     </class>
 </hibernate-mapping>
