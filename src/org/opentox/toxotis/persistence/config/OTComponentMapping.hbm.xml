@@ -23,7 +23,7 @@
         -->
         <joined-subclass
             name="org.opentox.toxotis.core.component.BibTeX">
-            <key column="uri"/>
+            <key column="uri" on-delete="cascade"/>
 
             <!-- In general think about 'all-delete-orphan'-->
             <property name="abstract"/>
@@ -62,21 +62,58 @@
         </joined-subclass>
 
         <!--
-
+            ErrorReport extends Component
         -->
         <joined-subclass
             name="org.opentox.toxotis.core.component.ErrorReport">
-            <key>
-                <column name="uri"/>                
-            </key>
+            <key column="uri" on-delete="cascade"/>
             <property name="httpStatus" type="int" length="3"/>
             <property name="actor"/>
             <property name="message"/>
             <property name="details" type="string" length="8000"/>
             <property name="errorCode" />
-            <many-to-one name="errorCause" cascade="all" class="org.opentox.toxotis.core.component.ErrorReport">
-            </many-to-one>
+            <many-to-one name="errorCause" cascade="all" class="org.opentox.toxotis.core.component.ErrorReport"/>
         </joined-subclass>
+
+        <!--
+            Feature extends OTComponent
+        -->
+        <joined-subclass
+            name="org.opentox.toxotis.core.component.Feature"
+            table="Feature">
+            <key column="uri" on-delete="cascade"></key>
+            <property name="units" type="string" length="50"/>
+            <set name="ontologies" table="FeatOntol" cascade="all-delete-orphan"><!-- Every feature is endowed with a set of ont. classes-->
+                <key column="featureUri"/>
+                <element column="featOntology" type="org.opentox.toxotis.persistence.usertypes.OntologicalClassUserType"/>
+            </set>
+            <set name="admissibleValues" table="FeatAdmVal">
+                <key column="featureUri"/>
+                <many-to-many class="org.opentox.toxotis.ontology.LiteralValue"/>
+            </set>
+        </joined-subclass>
+
+        <joined-subclass
+            name="org.opentox.toxotis.core.component.FeatureValue"
+            table="FeatureValue">
+            <key column="uri" on-delete="cascade"/>
+            <many-to-one name="feature" class="org.opentox.toxotis.core.component.Feature" cascade="all"/>
+            <many-to-one name="value" class="org.opentox.toxotis.ontology.LiteralValue" cascade="all"/>
+        </joined-subclass>
+
+
+        <!--
+            Parameter extends OTComponent
+        -->
+        <joined-subclass
+        name="org.opentox.toxotis.core.component.Parameter"
+        table="Parameter">
+            <key column="uri" on-delete="cascade"/>
+            <property name="name" type="string"/>
+            <property name="scope" type="org.opentox.toxotis.persistence.usertypes.ParamScopeUserType"/>
+            <many-to-one name="typedValue"  class="org.opentox.toxotis.ontology.LiteralValue" cascade="all"/>
+        </joined-subclass>
+
 
     </class>
 </hibernate-mapping>

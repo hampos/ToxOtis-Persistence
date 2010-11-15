@@ -169,7 +169,7 @@ public class Dataset extends OTPublishable<Dataset> {
                     writer.writeEmptyElement("rdf:type"); // #NODE_FEATURE_TYPE_DECL
                     explicitTypeDeclaration = true;
                     writer.writeAttribute("rdf:resource", OTClasses.NominalFeature().getUri());// REFERS TO #NODE_FEATURE_TYPE_DECL
-                    for (LiteralValue admissibleVal : f.getAdmissibleValue()) {
+                    for (LiteralValue admissibleVal : f.getAdmissibleValues()) {
                         writer.writeStartElement("ot:acceptValue"); // #NODE_ACCEPT_VALUE
                         // TODO: Include also the XSD datatype of the value...
                         writer.writeCharacters(admissibleVal.getValue().toString());// REFERS TO #NODE_ACCEPT_VALUE
@@ -367,8 +367,8 @@ public class Dataset extends OTPublishable<Dataset> {
                 attributes.addElement(new Attribute(feature.getUri().getStringNoQuery(), (FastVector) null));
             } else if (dataType.equals(WekaDataTypes.nominal)) {
                 // COPE WITH NOMINAL VALUES:
-                FastVector nominalFVec = new FastVector(feature.getAdmissibleValue().size());
-                for (LiteralValue value : feature.getAdmissibleValue()) {
+                FastVector nominalFVec = new FastVector(feature.getAdmissibleValues().size());
+                for (LiteralValue value : feature.getAdmissibleValues()) {
                     nominalFVec.addElement(value.getValue());
                 }
                 attributes.addElement(new Attribute(feature.getUri().getStringNoQuery(), nominalFVec));

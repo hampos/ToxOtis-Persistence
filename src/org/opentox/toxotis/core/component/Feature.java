@@ -44,7 +44,7 @@ public class Feature extends OTPublishable<Feature> {
 
     private Set<OntologicalClass> ontologies = new HashSet<OntologicalClass>();
     private String units;
-    private Set<LiteralValue> admissibleValue = new HashSet<LiteralValue>();
+    private Set<LiteralValue> admissibleValues = new HashSet<LiteralValue>();
 
     public Feature() {
         super();
@@ -54,12 +54,12 @@ public class Feature extends OTPublishable<Feature> {
         super(uri);
     }
 
-    public Set<LiteralValue> getAdmissibleValue() {
-        return admissibleValue;
+    public Set<LiteralValue> getAdmissibleValues() {
+        return admissibleValues;
     }
 
-    public void setAdmissibleValue(Set<LiteralValue> admissibleValue) {
-        this.admissibleValue = admissibleValue;
+    public void setAdmissibleValues(Set<LiteralValue> admissibleValue) {
+        this.admissibleValues = admissibleValue;
     }
 
     public Set<OntologicalClass> getOntologies() {
@@ -104,9 +104,9 @@ public class Feature extends OTPublishable<Feature> {
             }
         }
         /* Add admissible values in the RDF graph */
-        if (admissibleValue != null && !admissibleValue.isEmpty()) {
+        if (admissibleValues != null && !admissibleValues.isEmpty()) {
             DatatypeProperty accepts = OTDatatypeProperties.acceptValue().asDatatypeProperty(model);
-            for (LiteralValue tv : admissibleValue) {
+            for (LiteralValue tv : admissibleValues) {
                 if (tv != null) {
                     indiv.addProperty(accepts, model.createTypedLiteral(tv.getValue(), tv.getType()));
                 }
@@ -249,7 +249,7 @@ public class Feature extends OTPublishable<Feature> {
             if (featureOntologies.contains(OTClasses.NominalFeature()) || featureOntologies.contains(OTClasses.Nominal())) {
                 explicitTypeDeclaration = true;
                 writer.writeAttribute("rdf:resource", OTClasses.NominalFeature().getUri());// REFERS TO #NODE_FEATURE_TYPE_DECL
-                for (LiteralValue admissibleVal : getAdmissibleValue()) {
+                for (LiteralValue admissibleVal : getAdmissibleValues()) {
                     writer.writeStartElement("ot:acceptValue"); // #NODE_ACCEPT_VALUE
                     // TODO: Include also the XSD datatype of the value...
                     writer.writeCharacters(admissibleVal.getValue().toString());// REFERS TO #NODE_ACCEPT_VALUE

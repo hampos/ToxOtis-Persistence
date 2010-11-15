@@ -12,6 +12,7 @@ import org.opentox.toxotis.client.VRI;
 import org.opentox.toxotis.client.collection.Services;
 import org.opentox.toxotis.core.component.BibTeX;
 import org.opentox.toxotis.core.component.ErrorReport;
+import org.opentox.toxotis.core.component.Feature;
 import org.opentox.toxotis.ontology.LiteralValue;
 import org.opentox.toxotis.ontology.MetaInfo;
 import org.opentox.toxotis.ontology.ResourceValue;
@@ -59,10 +60,16 @@ public class Persist {
         //oc.setErrorCause(other);
         oc.setMeta(metaInfoToSave);
 
+        Feature f = new Feature(Services.ideaconsult().augment("feature", "5432432"));
+        f.getOntologies().add(OTClasses.NominalFeature());
+        f.getOntologies().add(OTClasses.StringFeature());
+        f.setUnits("Hello there in the DB! How are you?");
+        f.setMeta(metaInfoToSave);
+
 
         try {
             session.beginTransaction();
-            session.saveOrUpdate(oc);
+            session.saveOrUpdate(f);
             session.getTransaction().commit();
         } catch (ConstraintViolationException ex) {
             System.out.println("[EXCEPT] Attempt to violate a constraint");
