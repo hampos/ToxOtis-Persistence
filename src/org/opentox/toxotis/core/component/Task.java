@@ -25,7 +25,7 @@ public class Task extends OTOnlineResource<Task> {
         Task downloadedTask = tSpider.parse();
         setMeta(downloadedTask.getMeta());
         setErrorReport(downloadedTask.getErrorReport());
-        seStatus(downloadedTask.getStatus());
+        setStatus(downloadedTask.getStatus());
         setPercentageCompleted(downloadedTask.getPercentageCompleted());
         setResultUri(downloadedTask.getResultUri());
         setHttpStatus(downloadedTask.getHttpStatus());
@@ -71,11 +71,11 @@ public class Task extends OTOnlineResource<Task> {
 
     /**
      * ParameterValue the status of a task.
-     * @param hasStatus
+     * @param status
      *      The new value for the status of the task.
      */
-    public void seStatus(Status hasStatus) {
-        this.hasStatus = hasStatus;
+    public void setStatus(Status status) {
+        this.hasStatus = status;
     }
 
     public float getPercentageCompleted() {

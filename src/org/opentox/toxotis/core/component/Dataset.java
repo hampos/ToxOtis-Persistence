@@ -250,7 +250,7 @@ public class Dataset extends OTPublishable<Dataset> {
             dsUpload.loadFromRemote();
         } else if (status == 200) {
             dsUpload.setPercentageCompleted(100);
-            dsUpload.seStatus(Task.Status.COMPLETED);
+            dsUpload.setStatus(Task.Status.COMPLETED);
             try {
                 dsUpload.setUri(new VRI(remoteResult));
                 dsUpload.setResultUri(new VRI(remoteResult));

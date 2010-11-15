@@ -259,7 +259,7 @@ public class Compound extends DescriptorCaclulation<Compound> {
             if (status == 200) {
                 Task readyTask = new Task();
                 readyTask.setPercentageCompleted(100);
-                readyTask.seStatus(Task.Status.COMPLETED);
+                readyTask.setStatus(Task.Status.COMPLETED);
                 try {
                     readyTask.setResultUri(new VRI(client.getResponseText()));
                     return readyTask;

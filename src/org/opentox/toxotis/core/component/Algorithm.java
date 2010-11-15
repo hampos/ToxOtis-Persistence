@@ -41,7 +41,7 @@ public class Algorithm extends OTOnlineResource<Algorithm> implements OntologySe
     /** ParameterValue of parameters of the algorithm. Specify the way the algorithm is parametrized */
     private ArrayList<Parameter> parameters = new ArrayList<Parameter>();
     /** ParameterValue of ontological classes that characterize the algorithm*/
-    private Collection<OntologicalClass> ontologies;
+    private Set<OntologicalClass> ontologies;
     /** List of multi-parameters */
     private Set<MultiParameter> multiParameters = new LinkedHashSet<MultiParameter>();
 
@@ -76,7 +76,7 @@ public class Algorithm extends OTOnlineResource<Algorithm> implements OntologySe
      * @return
      *      The collection of ontological classes for this algorithm.
      */
-    public Collection<OntologicalClass> getOntologies() {
+    public Set<OntologicalClass> getOntologies() {
         return ontologies;
     }
 
@@ -85,7 +85,7 @@ public class Algorithm extends OTOnlineResource<Algorithm> implements OntologySe
      * @param ontologies
      *      A collection of ontological classes that characterize this algorithm.
      */
-    public void setOntologies(Collection<OntologicalClass> ontologies) {
+    public void setOntologies(Set<OntologicalClass> ontologies) {
         this.ontologies = ontologies;
     }
 

@@ -115,5 +115,20 @@
         </joined-subclass>
 
 
+        <!--
+            Task extends OTComponent
+        -->
+        <joined-subclass
+        name="org.opentox.toxotis.core.component.Task"
+        table="Task">
+            <key column="uri" on-delete="cascade"/>
+            <property name="resultUri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
+            <property name="httpStatus" type="float" precision="1"/>
+            <property name="percentageCompleted" type="float" precision="2"/>
+            <property name="status" type="org.opentox.toxotis.persistence.usertypes.TaskStatusUserType"/>
+            <many-to-one name="errorReport" class="org.opentox.toxotis.core.component.ErrorReport"/>
+        </joined-subclass>
+
+
     </class>
 </hibernate-mapping>

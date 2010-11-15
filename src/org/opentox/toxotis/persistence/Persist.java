@@ -49,8 +49,6 @@ public class Persist {
         other.setHttpStatus(400);
         other.setMessage("short message 2dfjshg");
 
-
-
         ErrorReport oc = new ErrorReport();
         oc.setActor("me");
         oc.setDetails("sdjghkrjhg kjsfkjhsrkjg ");
@@ -69,7 +67,7 @@ public class Persist {
 
         try {
             session.beginTransaction();
-            session.saveOrUpdate(f);
+            session.saveOrUpdate(oc);
             session.getTransaction().commit();
         } catch (ConstraintViolationException ex) {
             System.out.println("[EXCEPT] Attempt to violate a constraint");
