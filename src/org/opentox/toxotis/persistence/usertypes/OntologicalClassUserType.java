@@ -8,6 +8,7 @@ import java.sql.Types;
 import org.hibernate.HibernateException;
 import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.ontology.collection.OTClasses;
+import org.opentox.toxotis.ontology.impl.OntologicalClassImpl;
 
 /**
  *

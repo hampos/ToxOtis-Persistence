@@ -292,7 +292,7 @@ public class OTClasses {
 
     public static OntologicalClass String() {
         if (ms_String == null) {
-            OntologicalClass clazz = new OntologicalClassImpl("Srtring");
+            OntologicalClass clazz = new OntologicalClassImpl("String");
             clazz.getSuperClasses().add(DataType());
             ms_String = clazz;
         }

@@ -101,7 +101,7 @@ public class LiteralValue<T> implements Serializable {
     }
 
     public void setValueAsString(String value) {
-        System.out.println("Setting... "+value);
+        System.out.println("Setting... " + value);
         if (clazz != null) {
             if (value == null) {
                 this.value = null;
@@ -166,12 +166,5 @@ public class LiteralValue<T> implements Serializable {
 
     public Literal inModel(OntModel model) {
         return model.createTypedLiteral(getValue(), getType());
-    }
-
-    public static void main(String... args){
-        LiteralValue lv = new LiteralValue();
-        lv.setValueAsString("Fri Nov 12 06:12:06 EET 2010");
-        lv.setType(XSDDatatype.XSDdate);
-        System.out.println(lv);
     }
 }

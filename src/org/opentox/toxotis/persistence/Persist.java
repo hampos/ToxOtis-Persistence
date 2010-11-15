@@ -8,13 +8,12 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
-import org.opentox.toxotis.client.VRI;
 import org.opentox.toxotis.client.collection.Services;
-import org.opentox.toxotis.core.component.BibTeX;
 import org.opentox.toxotis.core.component.ErrorReport;
 import org.opentox.toxotis.core.component.Feature;
 import org.opentox.toxotis.ontology.LiteralValue;
 import org.opentox.toxotis.ontology.MetaInfo;
+import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.ontology.ResourceValue;
 import org.opentox.toxotis.ontology.collection.OTClasses;
 import org.opentox.toxotis.ontology.impl.MetaInfoImpl;
@@ -67,7 +66,7 @@ public class Persist {
 
         try {
             session.beginTransaction();
-            session.saveOrUpdate(oc);
+            session.save(OTClasses.StringFeature());
             session.getTransaction().commit();
         } catch (ConstraintViolationException ex) {
             System.out.println("[EXCEPT] Attempt to violate a constraint");
@@ -77,16 +76,13 @@ public class Persist {
 
         session = sf.openSession();
 
-        List resultsFoundInDB = session.createCriteria(MetaInfo.class).list();
+        List resultsFoundInDB = session.createCriteria(OntologicalClass.class).list();
         System.out.println("found " + resultsFoundInDB.size());
         for (Object o : resultsFoundInDB) {
             try {
-                MetaInfo mi = (MetaInfo) o;
-                Set<LiteralValue> slv = mi.getComments();
-                for (LiteralValue l : slv) {
-                    System.out.println(l.getValue() + " <----");
-                }
-                System.out.println(mi.getDate() + "<~~~~~");
+                OntologicalClass mi = (OntologicalClass) o;
+                System.out.println(mi.getName());
+                System.out.println(mi.getNameSpace());
             } catch (HibernateException e) {
                 e.printStackTrace();
             }

@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class dynamic-insert="false" dynamic-update="false" mutable="true" name="org.opentox.toxotis.ontology.ResourceValue" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="Resource">
-    <id column="rsId" type="int">
-      <generator class="native"/>
-    </id>
-    <property column="URI" name="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
-    <property column="CLASS" name="ontologicalClass" type="org.opentox.toxotis.persistence.usertypes.OntologicalClassUserType"/>
-  </class>
+    <class dynamic-insert="false" dynamic-update="false" mutable="true" name="org.opentox.toxotis.ontology.ResourceValue" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="Resource">
+        <id column="rsId" type="int">
+            <generator class="native"/>
+        </id>
+        <property column="URI" name="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
+        <!--
+        Old version...
+        <property column="CLASS" name="ontologicalClass" type="org.opentox.toxotis.persistence.usertypes.OntologicalClassUserType"/>
+        -->
+        <many-to-one name="ontologicalClass" class="org.opentox.toxotis.ontology.OntologicalClass" cascade="all">
+            <column name="DATATYPE_NS"/>
+            <column name="DATATYPE_Name" length="50"/>
+        </many-to-one>
+    </class>
 </hibernate-mapping>
