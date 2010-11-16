@@ -45,6 +45,10 @@ public class Algorithm extends OTOnlineResource<Algorithm> implements OntologySe
     /** List of multi-parameters */
     private Set<MultiParameter> multiParameters = new LinkedHashSet<MultiParameter>();
 
+    public Algorithm() {
+    }
+
+    
     /**
      * Create a new instance of Algorithm providing its identifier as a {@link VRI }.
      * @param uri

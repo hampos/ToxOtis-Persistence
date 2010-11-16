@@ -5,8 +5,11 @@ import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import org.opentox.toxotis.client.VRI;
+import org.opentox.toxotis.client.collection.Services;
 import org.opentox.toxotis.core.OTComponent;
 import org.opentox.toxotis.ontology.collection.OTClasses;
 import org.opentox.toxotis.ontology.collection.OTObjectProperties;
@@ -22,6 +25,16 @@ public class DataEntry extends OTComponent<DataEntry> {
 
     private Compound conformer;
     private List<FeatureValue> featureValues;
+    private final UUID uuid = UUID.randomUUID();
+    private static final String DISCRIMINATOR = "dataEntry";
+
+    @Override
+    public VRI getUri() {
+        if (uri == null) {
+            uri = Services.anonymous().augment(DISCRIMINATOR, uuid.toString());
+        }
+        return uri;
+    }
 
     public DataEntry() {
         featureValues = new ArrayList<FeatureValue>();
@@ -32,8 +45,6 @@ public class DataEntry extends OTComponent<DataEntry> {
         this.conformer = compound;
         this.featureValues = featureValues;
     }
-
-
 
     public Compound getConformer() {
         return conformer;

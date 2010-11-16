@@ -10,8 +10,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.opentox.toxotis.client.collection.Services;
 import org.opentox.toxotis.core.component.Algorithm;
+import org.opentox.toxotis.core.component.DataEntry;
+import org.opentox.toxotis.core.component.Dataset;
 import org.opentox.toxotis.core.component.ErrorReport;
 import org.opentox.toxotis.core.component.Feature;
+import org.opentox.toxotis.core.component.FeatureValue;
 import org.opentox.toxotis.ontology.LiteralValue;
 import org.opentox.toxotis.ontology.MetaInfo;
 import org.opentox.toxotis.ontology.OntologicalClass;
@@ -58,38 +61,30 @@ public class Persist {
         //oc.setErrorCause(other);
         oc.setMeta(metaInfoToSave);
 
-        Feature f = new Feature(Services.ideaconsult().augment("feature", "5432432"));
-        f.getOntologies().add(OTClasses.NominalFeature());
-        f.getOntologies().add(OTClasses.StringFeature());
-        f.setUnits("Hello there in the DB! How are you?");
-        f.setMeta(metaInfoToSave);
+        Dataset dataset = new Dataset(Services.ideaconsult().augment("dataset", "9")).loadFromRemote();
+        dataset.setMeta(metaInfoToSave);
+       
+        
+        session.beginTransaction();
+        session.save(dataset);
+        session.getTransaction().commit();
 
 
-        Algorithm a = new Algorithm(Services.ntua().augment("algorithm","svm")).loadFromRemote();
-        a.asOntModel().write(System.out);
-        try {
-            session.beginTransaction();
-            session.saveOrUpdate(a);
-            session.getTransaction().commit();
-        } catch (ConstraintViolationException ex) {
-            System.out.println("[EXCEPT] Attempt to violate a constraint");
-        } finally {
-            session.close();
-        }
 
-        session = sf.openSession();
 
-        List resultsFoundInDB = session.createCriteria(OntologicalClass.class).list();
-        System.out.println("found " + resultsFoundInDB.size());
-        for (Object o : resultsFoundInDB) {
-            try {
-                OntologicalClass mi = (OntologicalClass) o;
-                System.out.println(mi.getName());
-                System.out.println(mi.getNameSpace());
-            } catch (HibernateException e) {
-                e.printStackTrace();
-            }
-        }
+//        session = sf.openSession();
+//
+//        List resultsFoundInDB = session.createCriteria(OntologicalClass.class).list();
+//        System.out.println("found " + resultsFoundInDB.size());
+//        for (Object o : resultsFoundInDB) {
+//            try {
+//                OntologicalClass mi = (OntologicalClass) o;
+//                System.out.println(mi.getName());
+//                System.out.println(mi.getNameSpace());
+//            } catch (HibernateException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
     }
 }

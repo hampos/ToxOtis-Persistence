@@ -9,7 +9,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.util.ArrayList;
 import java.util.List;
 import org.opentox.toxotis.ToxOtisException;
-import org.opentox.toxotis.core.component.Conformer;
+import org.opentox.toxotis.core.component.Compound;
 import org.opentox.toxotis.core.component.DataEntry;
 import org.opentox.toxotis.core.component.FeatureValue;
 import org.opentox.toxotis.ontology.collection.OTObjectProperties;
@@ -37,8 +37,8 @@ public class DataEntrySpider extends Tarantula<DataEntry>{
                     (RDFNode)null));
             if(conformerIt.hasNext()){
                 Statement compStmt = conformerIt.nextStatement();
-                ConformerSpider conformerSpider = new ConformerSpider(model, compStmt.getObject().as(Resource.class).getURI());
-                Conformer conformer = conformerSpider.parse();
+                CompoundSpider conformerSpider = new CompoundSpider(model, compStmt.getObject().as(Resource.class).getURI());
+                Compound conformer = conformerSpider.parse();
                 dataEntry.setConformer(conformer);
             }
         StmtIterator valuesIt = model.listStatements(

@@ -9,13 +9,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import org.opentox.toxotis.ToxOtisException;
 import org.opentox.toxotis.client.VRI;
+import org.opentox.toxotis.client.collection.Services;
 import org.opentox.toxotis.core.OTComponent;
 import org.opentox.toxotis.ontology.collection.OTClasses;
 import org.opentox.toxotis.ontology.collection.OTDatatypeProperties;
 import org.opentox.toxotis.ontology.impl.MetaInfoImpl;
-import org.opentox.toxotis.util.spiders.ErrorReportSpider;
 
 /**
  * Error Reports are part of the OpenTox API since version 1.1. Error Reports define a
@@ -41,22 +40,18 @@ public class ErrorReport extends OTComponent<ErrorReport> {
     private String errorCode;
     /** Trace... */
     private ErrorReport errorCause;
+    private UUID uuid = UUID.randomUUID();
+    private static final String DISCRIMINATOR = "error";
 
     public ErrorReport() {
     }
 
     @Override
     public VRI getUri() {
-        VRI superUri = super.getUri();
-        if (superUri == null) {
-            try {
-                superUri = new VRI("http://anonymous/errorReport/" + UUID.randomUUID().toString());
-                setUri(superUri);
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(ErrorReport.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        if (uri == null) {
+            uri = Services.anonymous().augment(DISCRIMINATOR, uuid.toString());
         }
-        return superUri;
+        return uri;
     }
 
     public String getActor() {

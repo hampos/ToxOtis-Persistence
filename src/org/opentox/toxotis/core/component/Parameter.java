@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import org.opentox.toxotis.client.VRI;
+import org.opentox.toxotis.client.collection.Services;
 import org.opentox.toxotis.core.OTComponent;
 import org.opentox.toxotis.ontology.LiteralValue;
 import org.opentox.toxotis.ontology.MetaInfo;
@@ -39,17 +40,15 @@ public class Parameter<T> extends OTComponent<Parameter<T>> {
     private LiteralValue<T> typedValue;
     /** The scope of the parameter (mandatory/optional)*/
     private ParameterScope scope;
+    private final UUID uuid = UUID.randomUUID();
+    private static final String DISCRIMINATOR = "parameter";
 
     @Override
     public VRI getUri() {
         if (uri == null) {
-            try {
-                uri = new VRI("http://anonymous.org/parameter/").augment(UUID.randomUUID().toString());
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(Parameter.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            uri = Services.anonymous().augment(DISCRIMINATOR, uuid.toString());
         }
-        return super.getUri();
+        return uri;
     }
 
     public Parameter() {

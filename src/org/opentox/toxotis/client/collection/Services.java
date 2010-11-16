@@ -20,6 +20,15 @@ public class Services {
     private static final String _SSO_POLICY = "https://" + SSO_HOST + "/pol";
     private static final String _SSO_POLICY_OLD = "https://" + SSO_HOST + "/Pol/opensso-pol";
     private static final String _OPENTOX_ORG = "http://opentox.org/%s";
+    private static final String _ANONYMOUS_ONG = "http://anonymous.org/%s";
+
+    public static VRI anonymous() {
+        try {
+            return new VRI(String.format(_ANONYMOUS_ONG, ""));
+        } catch (URISyntaxException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
     public static VRI opentox() {
         try {

@@ -86,14 +86,26 @@
                 on-delete="cascade"
                 foreign-key="uri_in_feature"/>
             <property name="units" type="string" length="50"/>
-            <set name="ontologies" table="FeatOntol" cascade="all-delete-orphan"><!-- Every feature is endowed with a set of ont. classes-->
+
+
+            <!--
+            WARNING: BUG!!!!
+            If the following is activated weird things happen, regarding the
+            registration of datasets...
+            Have to create an issue and tackle it...
+            -->
+
+            <!--
+            <set name="ontologies" table="FeatOntol" >
                 <key column="featureUri"/>
                 <many-to-many class="org.opentox.toxotis.ontology.OntologicalClass" foreign-key="featureOntology">
                     <column name="DATATYPE_NS"/>
                     <column name="DATATYPE_Name" length="50"/>
                 </many-to-many>
             </set>
-            <set name="admissibleValues" table="FeatAdmVal">
+            -->
+
+            <set name="admissibleValues" table="FeatAdmVal" cascade="all">
                 <key column="featureUri"/>
                 <many-to-many class="org.opentox.toxotis.ontology.LiteralValue"/>
             </set>
@@ -189,6 +201,45 @@
             </set>
         </joined-subclass>
 
+        <joined-subclass
+            name="org.opentox.toxotis.core.component.Compound"
+            table="Compound"
+            >
+            <key
+                column="uri"
+                foreign-key="uri_in_compound"
+                on-delete="cascade"/>
+        </joined-subclass>
+
+        <joined-subclass
+            name="org.opentox.toxotis.core.component.DataEntry"
+            table="DataEntry">
+            <key column="uri"
+                 foreign-key="uri_in_dataEntry"
+                 on-delete="cascade"/>
+            <many-to-one name="conformer" class="org.opentox.toxotis.core.component.Compound" cascade="all"/>
+            <list name="featureValues" cascade="all" table="DataEntryFeatVal">
+                <key column="dataEntryUri" foreign-key="dataEntryUri_in_DataEntryFeatVal"/>
+                <index column="featureVal_IDX"/>
+                <many-to-many class="org.opentox.toxotis.core.component.FeatureValue" column="featureValUri"
+                              foreign-key="featureValueUri_in_DataEntryFeatVal"/>
+            </list>
+
+        </joined-subclass>
+
+        <joined-subclass
+            name="org.opentox.toxotis.core.component.Dataset">
+            <key column="uri"
+                 foreign-key="uri_in_dataset"
+                 on-delete="cascade"/>
+            <list
+                name="dataEntries" cascade="all">
+                <key column="datasetUri"/>
+                <index column="dataEntryDs_IDX"/>
+                <one-to-many class="org.opentox.toxotis.core.component.DataEntry"/>
+            </list>
+
+        </joined-subclass>
 
     </class>
 </hibernate-mapping>
