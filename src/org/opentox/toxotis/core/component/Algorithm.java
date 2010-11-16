@@ -39,7 +39,7 @@ import org.opentox.toxotis.util.spiders.AlgorithmSpider;
 public class Algorithm extends OTOnlineResource<Algorithm> implements OntologyServiceSupport<Algorithm> {
 
     /** ParameterValue of parameters of the algorithm. Specify the way the algorithm is parametrized */
-    private ArrayList<Parameter> parameters = new ArrayList<Parameter>();
+    private Set<Parameter> parameters = new HashSet<Parameter>();
     /** ParameterValue of ontological classes that characterize the algorithm*/
     private Set<OntologicalClass> ontologies;
     /** List of multi-parameters */
@@ -94,7 +94,7 @@ public class Algorithm extends OTOnlineResource<Algorithm> implements OntologySe
      * @return
      *      ParameterValue of parameters.
      */
-    public ArrayList<Parameter> getParameters() {
+    public Set<Parameter> getParameters() {
         return parameters;
     }
 
@@ -103,7 +103,7 @@ public class Algorithm extends OTOnlineResource<Algorithm> implements OntologySe
      * @param parameters
      *      ParameterValue of parameters.
      */
-    public Algorithm setParameters(ArrayList<Parameter> parameters) {
+    public Algorithm setParameters(Set<Parameter> parameters) {
         this.parameters = parameters;
         return this;
     }

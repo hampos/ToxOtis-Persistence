@@ -31,8 +31,8 @@ public class ParameterSpider extends Tarantula<Parameter> {
                 asDatatypeProperty(model));
         if (scopes != null && !scopes.isEmpty()) {
             if (scopes.size() > 1) {
-                System.err.println("[WARN ] Multiple scopes declared for the parsed parameter! " +
-                        "Only one will be taken into account.");
+                System.err.println("[WARN ] Multiple scopes declared for the parsed parameter! "
+                        + "Only one will be taken into account.");
             }
             LiteralValue scope = scopes.iterator().next();
             parameter.setScope(Parameter.ParameterScope.valueOf(scope.getValue().toString().toUpperCase()));
@@ -40,22 +40,19 @@ public class ParameterSpider extends Tarantula<Parameter> {
 
         Set<LiteralValue> paramTypedValues = retrievePropertyLiterals(OTDatatypeProperties.paramValue().asDatatypeProperty(model));
         if (paramTypedValues != null && !paramTypedValues.isEmpty()) {
-            if (paramTypedValues.size()>1){
-                System.err.println("[WARN ] Multiple parameter values are declared for a single parameter. " +
-                        "Only one of them will be taken into account!");
+            if (paramTypedValues.size() > 1) {
+                System.err.println("[WARN ] Multiple parameter values are declared for a single parameter. "
+                        + "Only one of them will be taken into account!");
             }
             LiteralValue paramTypedValue = paramTypedValues.iterator().next();
             parameter.setTypedValue(paramTypedValue);
         }
-        
+
 
         MetaInfoSpider metaSpider = new MetaInfoSpider(resource, model);
         MetaInfo mi = metaSpider.parse();
         parameter.setMeta(mi);
-        // The name of the parameter is defined using the dc:title property
-        if (mi.getTitles() != null && !mi.getTitles().isEmpty()) {
-            parameter.setName(mi.getTitles().iterator().next().getValue().toString());
-        }
+        // Note: The name of the parameter is defined using the dc:title property
 
         return parameter;
     }

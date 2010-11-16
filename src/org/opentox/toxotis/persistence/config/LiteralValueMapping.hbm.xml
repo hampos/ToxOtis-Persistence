@@ -15,7 +15,7 @@
         these two attributes be a composite primary key that uniquely identifies
         a literal value but then it became clear that values should be dissociated.
             -->
-    <property column="VALUE" name="valueAsString" type="string"/>
+    <property column="VALUE" name="valueAsString" type="string" length="8000"/>
     <property column="DATATYPE" name="type" type="org.opentox.toxotis.persistence.usertypes.XSDDatatypeUserType"/>
   </class>
 </hibernate-mapping>

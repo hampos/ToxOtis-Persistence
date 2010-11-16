@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.opentox.toxotis.client.collection.Services;
+import org.opentox.toxotis.core.component.Algorithm;
 import org.opentox.toxotis.core.component.ErrorReport;
 import org.opentox.toxotis.core.component.Feature;
 import org.opentox.toxotis.ontology.LiteralValue;
@@ -64,9 +65,11 @@ public class Persist {
         f.setMeta(metaInfoToSave);
 
 
+        Algorithm a = new Algorithm(Services.ntua().augment("algorithm","svm")).loadFromRemote();
+        a.asOntModel().write(System.out);
         try {
             session.beginTransaction();
-            session.save(OTClasses.StringFeature());
+            session.saveOrUpdate(a);
             session.getTransaction().commit();
         } catch (ConstraintViolationException ex) {
             System.out.println("[EXCEPT] Attempt to violate a constraint");

@@ -40,7 +40,7 @@ public class Trainer {
     }
 
     public void setAlgorithm(Algorithm algorithm) {
-        if(algorithm == null){
+        if (algorithm == null) {
             throw new NullPointerException("Cannot set a null Algorithm to a Trainer.");
         }
         this.algorithm = algorithm;
@@ -77,26 +77,29 @@ public class Trainer {
         if (predictionFeature != null) {
             client.addPostParameter("prediction_feature", predictionFeature.getUri().toString());
         }
-        for (Parameter parameter : algorithm.getParameters()) {
-            client.addPostParameter(parameter.getName(), parameter.getTypedValue().getValue().toString());
+        if (algorithm.getParameters() != null && !algorithm.getParameters().isEmpty()) {
+            for (Parameter parameter : algorithm.getParameters()) {
+                client.addPostParameter(parameter.getName().getValueAsString(),
+                        parameter.getTypedValue().getValue().toString());
+            }
         }
         client.post();
         String response = client.getResponseText();
         try {
             int status = client.getResponseCode();
             System.out.println(status);
-            if(status == 202){
-               return new TaskSpider(new VRI(response)).parse();
-            }else {
+            if (status == 202) {
+                return new TaskSpider(new VRI(response)).parse();
+            } else {
                 Task task = new Task();
                 task.setHttpStatus(status);
                 task.setPercentageCompleted(100);
                 task.setResultUri(new VRI(response));
                 return task;
-            }            
-        } catch (IOException ex){
+            }
+        } catch (IOException ex) {
             throw new ToxOtisException(ex);
-        }catch (URISyntaxException ex) {
+        } catch (URISyntaxException ex) {
             throw new ToxOtisException(ErrorCause.TrainingError, response);
         }
     }

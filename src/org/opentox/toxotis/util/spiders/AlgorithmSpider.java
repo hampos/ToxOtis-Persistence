@@ -145,6 +145,7 @@ public class AlgorithmSpider extends Tarantula<Algorithm> {
         while (itParam.hasNext()) {
             ParameterSpider paramSpider = new ParameterSpider(model, itParam.nextStatement().getObject().as(Resource.class));
             algorithm.getParameters().add(paramSpider.parse());
+            System.out.println(paramSpider.parse().getMeta().getComments().iterator().next());
         }
         return algorithm;
 

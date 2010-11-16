@@ -1,6 +1,5 @@
 package org.opentox.toxotis.core.component;
 
-import org.opentox.toxotis.core.component.Task;
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.ontology.DatatypeProperty;
 import com.hp.hpl.jena.ontology.Individual;
@@ -20,7 +19,6 @@ import org.opentox.toxotis.client.PostClient;
 import org.opentox.toxotis.client.VRI;
 import org.opentox.toxotis.client.collection.Services;
 import org.opentox.toxotis.core.OTPublishable;
-import org.opentox.toxotis.core.component.Task;
 import org.opentox.toxotis.ontology.LiteralValue;
 import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.ontology.collection.OTClasses;
