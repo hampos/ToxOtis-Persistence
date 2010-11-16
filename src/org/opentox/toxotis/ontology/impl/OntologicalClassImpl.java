@@ -107,6 +107,8 @@ public class OntologicalClassImpl implements OntologicalClass {
         return ns + name;
     }
 
+    public void setUri(String uri){}
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof OntologicalClass) {

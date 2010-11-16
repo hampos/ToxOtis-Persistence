@@ -23,6 +23,10 @@ public interface OntologicalClass extends OTResource, java.io.Serializable {
     void setSuperClasses(Set<OntologicalClass> superClasses);
 
     Set<OntologicalClass> getDisjointWith();
+    
+    String getUri();
+
+    void setUri(String uri);
 
     void setDisjointWith(Set<OntologicalClass> disjointWith);
 

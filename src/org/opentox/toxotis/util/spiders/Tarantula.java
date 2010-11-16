@@ -185,7 +185,6 @@ public abstract class Tarantula<Result> implements Closeable {
                 ontClassSet.add(tempClass);
                 ontClassSet = getSuperTypes(ontClassSet);
             }
-
         }
         for (OntClass oc : ontClassSet) {
             ontClasses.add(OTClasses.forName(oc.getLocalName()));

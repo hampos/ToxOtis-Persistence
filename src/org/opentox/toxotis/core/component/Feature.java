@@ -44,6 +44,7 @@ public class Feature extends OTPublishable<Feature> {
     private String units;
     private Set<LiteralValue> admissibleValues = new HashSet<LiteralValue>();
 
+
     public Feature() {
         super();
     }
@@ -66,6 +67,27 @@ public class Feature extends OTPublishable<Feature> {
 
     public void setOntologies(Set<OntologicalClass> ontologies) {
         this.ontologies = ontologies;
+    }
+
+    public Set<OntologicalClass> getLowLevelOntologies(){
+        Set<OntologicalClass> lowLevel = new HashSet<OntologicalClass>();
+        for (OntologicalClass oc : ontologies){
+            if (oc.equals(OTClasses.NominalFeature()) || oc.equals(OTClasses.NumericFeature()) || oc.equals(OTClasses.StringFeature())){
+                lowLevel.add(oc);
+            }
+        }
+        if (lowLevel.isEmpty()){
+            lowLevel.add(OTClasses.StringFeature());
+        }
+        return lowLevel;
+    }
+
+    public void setLowLevelOntologies(Set<OntologicalClass> ontologies){
+        if (this.ontologies==null){
+            this.ontologies = ontologies;
+        }else{
+            this.ontologies.addAll(ontologies);
+        }
     }
 
     public String getUnits() {
@@ -298,4 +320,37 @@ public class Feature extends OTPublishable<Feature> {
         }
         endRdfWriter(writer);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Feature other = (Feature) obj;
+        if (this.ontologies != other.ontologies && (this.ontologies == null || !this.ontologies.equals(other.ontologies))) {
+            return false;
+        }
+        if ((this.units == null) ? (other.units != null) : !this.units.equals(other.units)) {
+            return false;
+        }
+        if (this.admissibleValues != other.admissibleValues && (this.admissibleValues == null || !this.admissibleValues.equals(other.admissibleValues))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 19 * hash + (this.ontologies != null ? this.ontologies.hashCode() : 0);
+        hash = 19 * hash + (this.units != null ? this.units.hashCode() : 0);
+        hash = 19 * hash + (this.admissibleValues != null ? this.admissibleValues.hashCode() : 0);
+        return hash;
+    }
+
+   
+
 }

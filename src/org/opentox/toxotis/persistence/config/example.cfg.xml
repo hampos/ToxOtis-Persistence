@@ -33,5 +33,6 @@ database or preferences and rename this file into "hibernate.cfg.xml". The file 
     <mapping resource="org/opentox/toxotis/persistence/config/MetaInfoMapping.hbm.xml"/>
     <mapping resource="org/opentox/toxotis/persistence/config/OTComponentMapping.hbm.xml"/>
     <mapping resource="org/opentox/toxotis/persistence/config/OntologicalClassMapping.hbm.xml"/>
+    <mapping resource="org/opentox/toxotis/persistence/config/Feature.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

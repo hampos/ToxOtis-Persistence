@@ -4,6 +4,7 @@ import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,6 +34,7 @@ public class Persist {
     public static void main(String[] args) throws Exception {
         SessionFactory sf = HibernateUtil.getSessionFactory();
         Session session = sf.openSession();
+        session.setFlushMode(FlushMode.AUTO);
 
         MetaInfoImpl metaInfoToSave = new MetaInfoImpl();
         LiteralValue literal = new LiteralValue(new Double(93.24));
@@ -61,12 +63,12 @@ public class Persist {
         //oc.setErrorCause(other);
         oc.setMeta(metaInfoToSave);
 
-        Dataset dataset = new Dataset(Services.ideaconsult().augment("dataset", "9")).loadFromRemote();
+        Dataset dataset = new Dataset(Services.ideaconsult().augment("dataset", "6").addUrlParameter("max", "5")).loadFromRemote();
         dataset.setMeta(metaInfoToSave);
        
         
         session.beginTransaction();
-        session.save(dataset);
+        session.saveOrUpdate(dataset);
         session.getTransaction().commit();
 
 

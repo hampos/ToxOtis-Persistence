@@ -11,8 +11,7 @@
         <property column="CLASS" name="ontologicalClass" type="org.opentox.toxotis.persistence.usertypes.OntologicalClassUserType"/>
         -->
         <many-to-one name="ontologicalClass" class="org.opentox.toxotis.ontology.OntologicalClass" cascade="all">
-            <column name="DATATYPE_NS"/>
-            <column name="DATATYPE_Name" length="50"/>
+            <column name="DATATYPE_Uri"/>
         </many-to-one>
     </class>
 </hibernate-mapping>
