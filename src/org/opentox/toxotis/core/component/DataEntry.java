@@ -4,7 +4,9 @@ import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntModel;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -110,4 +112,31 @@ public class DataEntry extends OTComponent<DataEntry> {
     public void writeRdf(XMLStreamWriter writer) throws XMLStreamException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DataEntry other = (DataEntry) obj;
+        if (this.conformer != other.conformer && (this.conformer == null || !this.conformer.equals(other.conformer))) {
+            return false;
+        }
+        if (this.featureValues != other.featureValues && (this.featureValues == null || !this.featureValues.equals(other.featureValues))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + (this.conformer != null ? this.conformer.hashCode() : 0);
+        hash = 97 * hash + (this.featureValues != null ? this.featureValues.hashCode() : 0);
+        return hash;
+    }
+    
 }

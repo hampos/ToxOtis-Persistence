@@ -177,7 +177,7 @@ public class Compound extends DescriptorCaclulation<Compound> {
             if (data != null && data.size() >= 1) {
                 DataEntry firstEntry = ds.getDataEntries().get(0);
                 if (firstEntry != null && firstEntry.getFeatureValues().size() >= 1) {
-                    FeatureValue fVal = firstEntry.getFeatureValue(0);
+                    FeatureValue fVal = firstEntry.getFeatureValues().iterator().next();
                     if (fVal != null) {
                         return fVal.getValue();
                     }

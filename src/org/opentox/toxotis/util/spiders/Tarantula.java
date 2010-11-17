@@ -40,6 +40,7 @@ import org.opentox.toxotis.ontology.collection.OTClasses;
  */
 public abstract class Tarantula<Result> implements Closeable {
 
+    private static final boolean verbose = false;
     /**
      * The core resource that is to be parsed out of the
      * datamodel into an OpenTox component object.
@@ -143,9 +144,11 @@ public abstract class Tarantula<Result> implements Closeable {
                         throw new RuntimeException(ex);
                     }
                 } else if (node.isLiteral()) {
-                    System.err.println("[WARN ] Parsing warning (no exception is thrown). Timestamp : " + new Date(System.currentTimeMillis()) + ".");
-                    System.err.println("Details: Found literal value while expecting a resource for the property :" + prop.getURI());
-                    System.err.println("Property value : " + node.as(Literal.class).getString());
+                    if (verbose) {
+                        System.err.println("[WARN ] Parsing warning (no exception is thrown). Timestamp : " + new Date(System.currentTimeMillis()) + ".");
+                        System.err.println("Details: Found literal value while expecting a resource for the property :" + prop.getURI());
+                        System.err.println("Property value : " + node.as(Literal.class).getString());
+                    }
                 }
             } finally {
                 it.close();

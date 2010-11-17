@@ -470,4 +470,28 @@ public class Dataset extends OTPublishable<Dataset> {
                     + " returned an invalid task URI : " + taskUri, ex);
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Dataset other = (Dataset) obj;
+        if (this.dataEntries != other.dataEntries && (this.dataEntries == null || !this.dataEntries.equals(other.dataEntries))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + (this.dataEntries != null ? this.dataEntries.hashCode() : 0);
+        return hash;
+    }
+
+    
 }

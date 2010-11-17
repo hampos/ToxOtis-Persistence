@@ -23,7 +23,7 @@ public interface OntologicalClass extends OTResource, java.io.Serializable {
     void setSuperClasses(Set<OntologicalClass> superClasses);
 
     Set<OntologicalClass> getDisjointWith();
-    
+
     String getUri();
 
     void setUri(String uri);
@@ -31,4 +31,10 @@ public interface OntologicalClass extends OTResource, java.io.Serializable {
     void setDisjointWith(Set<OntologicalClass> disjointWith);
 
     OntClass inModel(OntModel model);
+
+    @Override
+    boolean equals(Object obj);
+
+    @Override
+    int hashCode();
 }

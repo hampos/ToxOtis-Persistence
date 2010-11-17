@@ -75,4 +75,31 @@ public class FeatureValue extends OTComponent<FeatureValue> {
     public void writeRdf(XMLStreamWriter writer) throws XMLStreamException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final FeatureValue other = (FeatureValue) obj;
+        if (this.feature != other.feature && (this.feature == null || !this.feature.equals(other.feature))) {
+            return false;
+        }
+        if (this.value != other.value && (this.value == null || !this.value.equals(other.value))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 67 * hash + (this.feature != null ? this.feature.hashCode() : 0);
+        hash = 67 * hash + (this.value != null ? this.value.hashCode() : 0);
+        return hash;
+    }
+    
 }

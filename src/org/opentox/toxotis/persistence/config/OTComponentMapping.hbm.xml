@@ -11,8 +11,9 @@
         polymorphism="implicit"
         optimistic-lock="version"
         mutable="true">
-
+       
         <id name="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
+
         <!--    Foreign (M2O) key pointing to MetaInformation
                 Question: is unique="true" correct here???
         -->
@@ -22,8 +23,7 @@
             BibTeX extends OTComponent
         -->
         <joined-subclass
-            name="org.opentox.toxotis.core.component.BibTeX"
-            dynamic-update="true">
+            name="org.opentox.toxotis.core.component.BibTeX">
             <key column="uri" on-delete="cascade"/>
 
             <!-- In general think about 'all-delete-orphan'-->
@@ -66,8 +66,7 @@
             ErrorReport extends Component
         -->
         <joined-subclass
-            name="org.opentox.toxotis.core.component.ErrorReport"
-            dynamic-update="true">
+            name="org.opentox.toxotis.core.component.ErrorReport">
             <key column="uri" on-delete="cascade"/>
             <property name="httpStatus" type="int" length="3"/>
             <property name="actor"/>
@@ -80,37 +79,27 @@
         <!--
             Feature extends OTComponent
         -->
-
-
-
-        <!--<joined-subclass
+        <joined-subclass
             name="org.opentox.toxotis.core.component.Feature"
-            table="Feature"
-            dynamic-update="true"
-            >
+            table="Feature">
             <key
                 column="uri"
                 on-delete="cascade"
                 foreign-key="uri_in_feature"/>
             <property name="units" type="string" length="50"/>
 
-            
-            Here we only store the low-level ontological types of the feature, meaning that we
-            don't need to store the information that it is a Thing, or a Feature! Of course it is!
-            So, it will be some set with possible entries: {ot:NumericFeature, ot:NominalFeature,
-            ot:StringFeature} or other ontological class from the OT namespace (if, say, some other
-            type is added in the future). What is more, we don't map to the entity OntologicalClass,
-            to keep it more simple. The datatype(s) of the feature are stored as strings in a
-            many-to-many relationship.
-            
-            <set name="lowLevelOntologies" table="FeatOntol" cascade="all">
-                <key>
-                    <column name="featureUri"/>
-                </key>
-                <element column="ont" type="org.opentox.toxotis.persistence.usertypes.OntologicalClassUserType"/>
-                <many-to-many class="org.opentox.toxotis.ontology.OntologicalClass" >
-                    <column name="aa"/>
-                    <column name="bb"/>
+
+            <!--
+            WARNING: BUG!!!!
+            If the following is activated weird things happen, regarding the
+            registration of datasets...
+            Have to create an issue and tackle it...
+            -->
+            <set name="ontologies" table="FeatOntol" cascade="all">
+                <key column="featureUri"/>
+                <many-to-many class="org.opentox.toxotis.ontology.OntologicalClass" foreign-key="featureOntology">
+                    <column name="DATATYPE_NS"/>
+                    <column name="DATATYPE_Name" length="50"/>
                 </many-to-many>
             </set>
 
@@ -118,7 +107,7 @@
                 <key column="featureUri"/>
                 <many-to-many class="org.opentox.toxotis.ontology.LiteralValue"/>
             </set>
-        </joined-subclass>-->
+        </joined-subclass>
 
         <joined-subclass
             name="org.opentox.toxotis.core.component.FeatureValue"
@@ -142,8 +131,7 @@
         -->
         <joined-subclass
             name="org.opentox.toxotis.core.component.Parameter"
-            table="Parameter"
-            dynamic-update="true">
+            table="Parameter">
             <key
                 column="uri"
                 on-delete="cascade"
@@ -162,8 +150,7 @@
         -->
         <joined-subclass
             name="org.opentox.toxotis.core.component.Task"
-            table="Task"
-            dynamic-update="true">
+            table="Task">
             <key
                 column="uri"
                 on-delete="cascade"
@@ -184,8 +171,7 @@
         -->
         <joined-subclass
             name="org.opentox.toxotis.core.component.Algorithm"
-            table="Algorithm"
-            dynamic-update="true">
+            table="Algorithm">
             <key
                 column="uri"
                 on-delete="cascade"
@@ -207,7 +193,8 @@
                     column="algorithmUri"
                     foreign-key="algorithmUri_ref_for_ontologies"/>
                 <many-to-many class="org.opentox.toxotis.ontology.OntologicalClass" foreign-key="algorithmOntology">
-                    <column name="DATATYPE_uri"/>
+                    <column name="DATATYPE_NS"/>
+                    <column name="DATATYPE_Name" length="50"/>
                 </many-to-many>
             </set>
         </joined-subclass>
@@ -215,7 +202,6 @@
         <joined-subclass
             name="org.opentox.toxotis.core.component.Compound"
             table="Compound"
-            dynamic-update="true"
             >
             <key
                 column="uri"
@@ -225,8 +211,7 @@
 
         <joined-subclass
             name="org.opentox.toxotis.core.component.DataEntry"
-            table="DataEntry"
-            dynamic-update="true">
+            table="DataEntry">
             <key column="uri"
                  foreign-key="uri_in_dataEntry"
                  on-delete="cascade"/>
@@ -241,8 +226,7 @@
         </joined-subclass>
 
         <joined-subclass
-            name="org.opentox.toxotis.core.component.Dataset"
-            dynamic-update="true">
+            name="org.opentox.toxotis.core.component.Dataset">
             <key column="uri"
                  foreign-key="uri_in_dataset"
                  on-delete="cascade"/>

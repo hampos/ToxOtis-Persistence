@@ -27,7 +27,10 @@ public class VRIUserType implements org.hibernate.usertype.UserType {
     }
 
     public boolean equals(Object x, Object y) {
-        return x == y;
+        if (x == null || y == null) {
+            return false;
+        }
+        return x.equals(y);
     }
 
     public Object deepCopy(Object value) {

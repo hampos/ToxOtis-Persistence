@@ -5,13 +5,15 @@
         <id column="rsId" type="int">
             <generator class="native"/>
         </id>
-        <property column="URI" name="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
+        <!--<many-to-one name="uri" column="uri" class="org.opentox.toxotis.client.VRI" cascade="all"/>-->
+        <property name="uri" column="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
         <!--
         Old version...
         <property column="CLASS" name="ontologicalClass" type="org.opentox.toxotis.persistence.usertypes.OntologicalClassUserType"/>
         -->
         <many-to-one name="ontologicalClass" class="org.opentox.toxotis.ontology.OntologicalClass" cascade="all">
-            <column name="DATATYPE_Uri"/>
+            <column name="DATATYPE_NS"/>
+            <column name="DATATYPE_Name" length="50"/>
         </many-to-one>
     </class>
 </hibernate-mapping>

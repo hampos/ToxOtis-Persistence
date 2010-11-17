@@ -1,6 +1,9 @@
 package org.opentox.toxotis.persistence;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +14,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.opentox.toxotis.client.collection.Services;
 import org.opentox.toxotis.core.component.Algorithm;
+import org.opentox.toxotis.core.component.Compound;
 import org.opentox.toxotis.core.component.DataEntry;
 import org.opentox.toxotis.core.component.Dataset;
 import org.opentox.toxotis.core.component.ErrorReport;
@@ -34,7 +38,26 @@ public class Persist {
     public static void main(String[] args) throws Exception {
         SessionFactory sf = HibernateUtil.getSessionFactory();
         Session session = sf.openSession();
-        session.setFlushMode(FlushMode.AUTO);
+
+        // Question: How can we know if the database is newly created?
+        // (In order to know whether we have to execute the following lines...)
+        final boolean doAlter = true;
+
+        if (doAlter) {
+            try {
+                Connection c = session.connection();
+                Statement stmt = c.createStatement();
+                stmt.addBatch("ALTER TABLE FeatOntol DROP PRIMARY KEY");
+                stmt.addBatch("ALTER TABLE FeatOntol ADD `ID_W` INT NOT NULL AUTO_INCREMENT PRIMARY KEY");
+                stmt.executeBatch();
+            } catch (HibernateException hbe) {
+                hbe.printStackTrace();
+            } catch (SQLException sqle) {
+                sqle.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         MetaInfoImpl metaInfoToSave = new MetaInfoImpl();
         LiteralValue literal = new LiteralValue(new Double(93.24));
@@ -47,46 +70,41 @@ public class Persist {
         metaInfoToSave.setDate(ll);
         metaInfoToSave.addSameAs(new ResourceValue(Services.ideaconsult(), OTClasses.Compound()));
 
-        ErrorReport other = new ErrorReport();
-        other.setActor("someone else");
-        other.setDetails("(#(#*(*W(&$#@*^*&@%%#$^#(");
-        other.setErrorCode("254");
-        other.setHttpStatus(400);
-        other.setMessage("short message 2dfjshg");
+        System.out.println("Loading from remote...");
+        Algorithm algorithm = new Algorithm(Services.ntua().augment("algorithm","svm")).loadFromRemote();
+        System.out.println("DONE!!!");
 
-        ErrorReport oc = new ErrorReport();
-        oc.setActor("me");
-        oc.setDetails("sdjghkrjhg kjsfkjhsrkjg ");
-        oc.setErrorCode("4");
-        oc.setHttpStatus(342);
-        oc.setMessage("short message");
-        //oc.setErrorCause(other);
-        oc.setMeta(metaInfoToSave);
-
-        Dataset dataset = new Dataset(Services.ideaconsult().augment("dataset", "6").addUrlParameter("max", "5")).loadFromRemote();
-        dataset.setMeta(metaInfoToSave);
-       
-        
+        session = sf.openSession();
         session.beginTransaction();
-        session.saveOrUpdate(dataset);
+        session.saveOrUpdate(algorithm);
         session.getTransaction().commit();
 
 
-
-
-//        session = sf.openSession();
-//
-//        List resultsFoundInDB = session.createCriteria(OntologicalClass.class).list();
-//        System.out.println("found " + resultsFoundInDB.size());
-//        for (Object o : resultsFoundInDB) {
-//            try {
-//                OntologicalClass mi = (OntologicalClass) o;
-//                System.out.println(mi.getName());
-//                System.out.println(mi.getNameSpace());
-//            } catch (HibernateException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        List resultsFoundInDB = session.createCriteria(Algorithm.class).list();
+        System.out.println("found " + resultsFoundInDB.size());
+        for (Object o : resultsFoundInDB) {
+            Algorithm ds = (Algorithm) o;
+            System.out.println(ds.getParameters());
+            System.out.println(ds.getUri());
+            System.out.println(ds.getOntologies());
+            System.out.println(ds.getMeta());
+        }
 
     }
 }
+
+//        Όταν μεγαλώσω θέλω,
+//        θέλω να γίνω 83 χρονών
+//        τσατσά σ'ένα μπουρδέλο
+//        χωρίς δόντια να μασάω τα κρουτόν
+//        και να διαβάζω Οθέλο
+//
+//        Όταν μεγαλώσω θέλω
+//        θελώ να γίνω διαστημικός σταθμός
+//        και να παίζω μπουγέλο
+//        κι από μένανε να βρέχει κι ο ουρανός
+//        τα ρούχα να σας πλένω
+//
+//        Η ομορφιά του θέλω,
+//        Μάρω Μαρκέλου
+//

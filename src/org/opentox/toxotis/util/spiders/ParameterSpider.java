@@ -3,6 +3,8 @@ package org.opentox.toxotis.util.spiders;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Resource;
 import java.util.Set;
+import java.util.UUID;
+import org.opentox.toxotis.client.collection.Services;
 import org.opentox.toxotis.core.component.Parameter;
 import org.opentox.toxotis.ontology.LiteralValue;
 import org.opentox.toxotis.ontology.MetaInfo;
@@ -22,7 +24,7 @@ public class ParameterSpider extends Tarantula<Parameter> {
     @Override
     public Parameter parse() {
         Parameter parameter = new Parameter();
-
+        parameter.setUri(Services.anonymous().augment("param", UUID.randomUUID().toString()));
 
         /*
          * Parse parameter scope...

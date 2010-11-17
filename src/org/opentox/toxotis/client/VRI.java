@@ -143,7 +143,7 @@ public class VRI implements Serializable { // Well tested!
     /**
      * Dummy contructor
      */
-    private VRI() {
+    public VRI() {
     }
 
     /**
@@ -156,6 +156,10 @@ public class VRI implements Serializable { // Well tested!
      */
     public VRI(String uri) throws URISyntaxException {
         this();
+        doProcessUri(uri);
+    }
+
+    private void doProcessUri(String uri) throws URISyntaxException{
         new URI(uri);
         if (!uri.contains("://")) {
             uri = "http://" + uri;
@@ -578,7 +582,6 @@ public class VRI implements Serializable { // Well tested!
             return false;
         }
         final VRI other = (VRI) obj;
-
         if ((this.uri == null) || (other.uri == null)) {
             return false;
         }
@@ -595,4 +598,18 @@ public class VRI implements Serializable { // Well tested!
         hash = 37 * hash + (this.uri != null ? this.uri.hashCode() : 0);
         return hash;
     }
+
+    public String getUri() {
+        return toString();
+    }
+
+    public void setUri(String uri) {
+        try {
+            doProcessUri(uri);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(VRI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
 }

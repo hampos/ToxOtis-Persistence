@@ -40,16 +40,17 @@ public class Parameter<T> extends OTComponent<Parameter<T>> {
     private LiteralValue<T> typedValue;
     /** The scope of the parameter (mandatory/optional)*/
     private ParameterScope scope;
-    private final UUID uuid = UUID.randomUUID();
-    private static final String DISCRIMINATOR = "parameter";
+//    private final UUID uuid = UUID.randomUUID();
+//    private static final String DISCRIMINATOR = "parameter";
+//
+//    @Override
+//    public VRI getUri() {
+//        if (uri == null) {
+//            uri = Services.anonymous().augment(DISCRIMINATOR, uuid.toString());
+//        }
+//        return uri;
+//    }
 
-    @Override
-    public VRI getUri() {
-        if (uri == null) {
-            uri = Services.anonymous().augment(DISCRIMINATOR, uuid.toString());
-        }
-        return uri;
-    }
 
     public Parameter() {
         super();

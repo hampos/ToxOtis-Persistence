@@ -101,7 +101,6 @@ public class LiteralValue<T> implements Serializable {
     }
 
     public void setValueAsString(String value) {
-        System.out.println("Setting... " + value);
         if (clazz != null) {
             if (value == null) {
                 this.value = null;
