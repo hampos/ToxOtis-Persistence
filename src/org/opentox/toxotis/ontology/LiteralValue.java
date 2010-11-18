@@ -158,7 +158,7 @@ public class LiteralValue<T> implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 71 * hash + (this.value != null ? this.value.hashCode() : 0);
+        hash = 71 * hash + (this.value != null ? this.value.toString().hashCode() : 0);
         hash = 71 * hash + (this.type != null ? this.type.hashCode() : 0);
         return hash;
     }

@@ -33,23 +33,12 @@ public class Parameter<T> extends OTComponent<Parameter<T>> {
 
         OPTIONAL,
         MANDATORY;
+        
     };
-    /** The name of the parameter*/
-    private String name;
     /** Typed value for the parameter */
     private LiteralValue<T> typedValue;
     /** The scope of the parameter (mandatory/optional)*/
     private ParameterScope scope;
-//    private final UUID uuid = UUID.randomUUID();
-//    private static final String DISCRIMINATOR = "parameter";
-//
-//    @Override
-//    public VRI getUri() {
-//        if (uri == null) {
-//            uri = Services.anonymous().augment(DISCRIMINATOR, uuid.toString());
-//        }
-//        return uri;
-//    }
 
 
     public Parameter() {
@@ -124,7 +113,7 @@ public class Parameter<T> extends OTComponent<Parameter<T>> {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Name  : ");
-        builder.append(name);
+        builder.append(getName());
         builder.append("\n");
         builder.append("Value : ");
         builder.append(typedValue.getValue());
@@ -152,15 +141,18 @@ public class Parameter<T> extends OTComponent<Parameter<T>> {
         if (this.scope != other.scope && (this.scope == null || !this.scope.equals(other.scope))) {
             return false;
         }
+        if (getName() != other.getName() && (getName() == null || !getName().equals(other.getName()))) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 37 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 37 * hash + (this.typedValue != null ? this.typedValue.hashCode() : 0);
-        hash = 37 * hash + (this.scope != null ? this.scope.hashCode() : 0);
+        hash = 37 * hash + (this.getName() != null ? this.getName().toString().hashCode() : 0);
+        hash = 37 * hash + (this.typedValue != null ? this.typedValue.toString().hashCode() : 0);
+        hash = 37 * hash + (this.scope != null ? this.scope.toString().hashCode() : 0);
         return hash;
     }
 }

@@ -62,8 +62,8 @@ public interface MetaInfo extends java.io.Serializable {
 
     void setDescriptions(Set<LiteralValue> descriptions);
 
-    void addDescription(LiteralValue description);
-    void addDescription(String description);
+    MetaInfo addDescription(LiteralValue description);
+    MetaInfo addDescription(String description);
 
     /**
      * Get the identifier (ID) of the described entity. An identifier is an unambiguous

@@ -88,7 +88,7 @@ public class AlgorithmSpider extends Tarantula<Algorithm> {
             int status = client.getResponseCode();
             if (status != 200) {
                 OntModel om = client.getResponseOntModel();
-                ErrorReportSpider ersp = new ErrorReportSpider(uri, om);
+                ErrorReportSpider ersp = new ErrorReportSpider(om);
                 ErrorReport er = ersp.parse();
 
                 if (status == 403) {
@@ -145,7 +145,6 @@ public class AlgorithmSpider extends Tarantula<Algorithm> {
         while (itParam.hasNext()) {
             ParameterSpider paramSpider = new ParameterSpider(model, itParam.nextStatement().getObject().as(Resource.class));
             algorithm.getParameters().add(paramSpider.parse());
-            System.out.println(paramSpider.parse().getMeta().getComments().iterator().next());
         }
         return algorithm;
 

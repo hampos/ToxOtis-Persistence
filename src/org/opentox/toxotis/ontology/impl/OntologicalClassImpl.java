@@ -107,7 +107,8 @@ public class OntologicalClassImpl implements OntologicalClass {
         return ns + name;
     }
 
-    public void setUri(String uri){}
+    public void setUri(String uri) {
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -137,15 +138,24 @@ public class OntologicalClassImpl implements OntologicalClass {
             if (meta != null) {
                 meta.attachTo(clazz, model);
             }
-            for (OntologicalClass superClazz : getSuperClasses()) {
-                clazz.addSuperClass(superClazz.inModel(model));
+            if (getSuperClasses() != null) {
+                for (OntologicalClass superClazz : getSuperClasses()) {
+                    clazz.addSuperClass(superClazz.inModel(model));
+                }
             }
-
-            for (OntologicalClass disjointClazz : getDisjointWith()) {
-                clazz.addDisjointWith(disjointClazz.inModel(model));
+            if (disjointWith != null) {
+                for (OntologicalClass disjointClazz : getDisjointWith()) {
+                    clazz.addDisjointWith(disjointClazz.inModel(model));
+                }
             }
         }
         return clazz;
-
     }
+
+    @Override
+    public String toString() {
+        return getUri();
+    }
+
+
 }

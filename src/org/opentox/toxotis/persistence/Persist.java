@@ -20,12 +20,16 @@ import org.opentox.toxotis.core.component.Dataset;
 import org.opentox.toxotis.core.component.ErrorReport;
 import org.opentox.toxotis.core.component.Feature;
 import org.opentox.toxotis.core.component.FeatureValue;
+import org.opentox.toxotis.core.component.Model;
+import org.opentox.toxotis.core.component.Parameter;
 import org.opentox.toxotis.ontology.LiteralValue;
 import org.opentox.toxotis.ontology.MetaInfo;
 import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.ontology.ResourceValue;
 import org.opentox.toxotis.ontology.collection.OTClasses;
 import org.opentox.toxotis.ontology.impl.MetaInfoImpl;
+import org.opentox.toxotis.ontology.impl.OntologicalClassImpl;
+import org.opentox.toxotis.persistence.db.RegisterTool;
 import org.opentox.toxotis.persistence.util.HibernateUtil;
 
 /**
@@ -41,7 +45,7 @@ public class Persist {
 
         // Question: How can we know if the database is newly created?
         // (In order to know whether we have to execute the following lines...)
-        final boolean doAlter = true;
+        final boolean doAlter = false;
 
         if (doAlter) {
             try {
@@ -49,6 +53,7 @@ public class Persist {
                 Statement stmt = c.createStatement();
                 stmt.addBatch("ALTER TABLE FeatOntol DROP PRIMARY KEY");
                 stmt.addBatch("ALTER TABLE FeatOntol ADD `ID_W` INT NOT NULL AUTO_INCREMENT PRIMARY KEY");
+                stmt.addBatch("ALTER TABLE OTComponent ADD `created` TIMESTAMP NOT NULL DEFAULT NOW()");
                 stmt.executeBatch();
             } catch (HibernateException hbe) {
                 hbe.printStackTrace();
@@ -59,61 +64,42 @@ public class Persist {
             }
         }
 
-        MetaInfoImpl metaInfoToSave = new MetaInfoImpl();
-        LiteralValue literal = new LiteralValue(new Double(93.24));
-        metaInfoToSave.addComment(literal);
-        metaInfoToSave.addSameAs(new ResourceValue(Services.ambitUniPlovdiv(), OTClasses.Compound()));
-        metaInfoToSave.addTitle("some title goes here!");
-        metaInfoToSave.addDescription("brief description");
-        metaInfoToSave.addDescription("brief description 2");
-        LiteralValue ll = new LiteralValue(new Date(System.currentTimeMillis()), XSDDatatype.XSDdate);
-        metaInfoToSave.setDate(ll);
-        metaInfoToSave.addSameAs(new ResourceValue(Services.ideaconsult(), OTClasses.Compound()));
-
-        System.out.println("Loading from remote...");
-        Algorithm algorithm = new Algorithm(Services.ntua().augment("algorithm", "svm")).loadFromRemote();
-        System.out.println("DONE!!!");
-
-        session = sf.openSession();
-        Dataset ds = new Dataset(Services.ideaconsult().augment("dataset", "9").addUrlParameter("max", "55")).loadFromRemote();
-
-        session.beginTransaction();
-        for (Feature f :ds.getContainedFeatures()){
-            session.saveOrUpdate(f);
-        }
-        session.getTransaction().commit();
-
-        session.beginTransaction();
-        
-        Set<FeatureValue> ff = ds.getFeatureValues();
-        for (FeatureValue p : ff){
-                 session.saveOrUpdate(p);
-        }
-        session.getTransaction().commit();
-
-        session.beginTransaction();
-        session.save(ds);
-        session.getTransaction().commit();
-
-        //Possible successful procedure:
         /*
-         * 0. (Possibly not needed!) Register features first!
-         * 1. Register all feature value ( we need method getAllFeatureValues() )
-         * 2. Register all dataentries and then the dataset or may, the dataset right away!
+         * OPEN SESSION
          */
-        // Note: Throughout a session uuids are imutable
+        session = sf.openSession();
+//        RegisterTool.storeAllOntClasses(session);
+        
 
+//        System.out.println("Loading Algorithm");
+//        Algorithm algorithm = new Algorithm(Services.ntua().augment("algorithm", "filter")).loadFromRemote();
+//        System.out.println("Algorithm Loaded");
+//        System.out.println("Storing Algorithm");
+//        RegisterTool.storeAlgorithm(algorithm, session);
+//        System.out.println("Algorithm registered successfully!");
 //
-//        List resultsFoundInDB = session.createCriteria(Algorithm.class).list();
-//        System.out.println("found " + resultsFoundInDB.size());
-//        for (Object o : resultsFoundInDB) {
-//            Algorithm a = (Algorithm) o;
-//            System.out.println(a.getParameters());
-//            System.out.println(a.getUri());
-//            System.out.println(a.getOntologies());
-//            System.out.println(a.getOntologies().iterator().next().getSuperClasses().iterator().next().getUri());
-//            System.out.println(a.getMeta());
-//        }
+//        System.out.println("Loading Dataset");
+//        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "9").addUrlParameter("max", "5")).loadFromRemote();
+//        System.out.println("Dataset Loaded");
+//        System.out.println("Storing Dataset");
+//        RegisterTool.storeDataset(d, session);
+//        System.out.println("Dataset registered successfully!");
+//
+//        System.out.println("Loading Model");
+//        Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote();
+//        System.out.println("Model Loaded");
+//        System.out.println("Storing Model");
+//        RegisterTool.storeModel(model, session);
+
+          List resultsFoundInDB = session.createCriteria(Model.class).list();
+        System.out.println("found " + resultsFoundInDB.size());
+        for (Object o : resultsFoundInDB) {
+            Model mod = (Model) o;
+            for (Parameter pp : mod.getParameters()){
+                System.out.println(pp.getMeta().getComments());
+            }
+        }
+
 
         session.close();
 
@@ -134,3 +120,4 @@ public class Persist {
 //        Η ομορφιά του θέλω,
 //        Μάρω Μαρκέλου
 //
+

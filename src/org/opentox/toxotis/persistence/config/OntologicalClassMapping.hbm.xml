@@ -17,7 +17,7 @@
         </composite-id>
         <discriminator column="_DISCRIM_" type="integer" length="1"/>
         <many-to-one name="metaInfo" class="org.opentox.toxotis.ontology.MetaInfo" not-null="false" cascade="all"/>
-        <set name="disjointWith" cascade="all">
+        <set name="disjointWith" cascade="none">
             <key on-delete="noaction">
                 <column name="resource_NS"/>
                 <column name="resource_name" length="50"/>
@@ -27,7 +27,7 @@
                 <column name="disjointWith_name" length="50"/>
             </many-to-many>
         </set>
-        <set name="superClasses" cascade="all">
+        <set name="superClasses" cascade="none">
             <key on-delete="noaction">
                 <column name="resource_NS"/>
                 <column name="resource_name" length="50"/>

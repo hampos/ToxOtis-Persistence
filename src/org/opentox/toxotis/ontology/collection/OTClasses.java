@@ -3,8 +3,13 @@ package org.opentox.toxotis.ontology.collection;
 import com.hp.hpl.jena.vocabulary.OWL;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.ontology.impl.OntologicalClassImpl;
 
@@ -62,6 +67,24 @@ public class OTClasses {
                 }
             }
         }
+    }
+
+    public static Set<OntologicalClass> getAll(){
+        initMethodCache();
+        Set<OntologicalClass> result = new HashSet<OntologicalClass>();
+        Collection<Method> methods = ms_methodCache.values();
+        for (Method m : methods){
+            try {
+                result.add((OntologicalClass)m.invoke(null));
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(OTClasses.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(OTClasses.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvocationTargetException ex) {
+                Logger.getLogger(OTClasses.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return result;
     }
 
     /**

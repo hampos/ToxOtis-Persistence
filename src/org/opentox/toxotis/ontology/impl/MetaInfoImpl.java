@@ -286,7 +286,7 @@ public class MetaInfoImpl implements MetaInfo {
         this.descriptions = descriptions;
     }
 
-    public void addDescription(LiteralValue description) {
+    public MetaInfo addDescription(LiteralValue description) {
         if (getDescriptions() != null) {
             getDescriptions().add(description);
         } else {
@@ -294,10 +294,12 @@ public class MetaInfoImpl implements MetaInfo {
             values.add(description);
             setDescriptions(values);
         }
+        return this;
     }
 
-    public void addDescription(String description) {
+    public MetaInfo addDescription(String description) {
         addDescription(new LiteralValue<String>(description));
+        return this;
     }
 
     public Set<LiteralValue> getIdentifiers() {

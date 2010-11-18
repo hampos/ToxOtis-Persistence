@@ -8,6 +8,9 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.opentox.toxotis.ErrorCause;
@@ -119,7 +122,7 @@ public class ModelSpider extends Tarantula<Model> {
                 new SimpleSelector(resource,
                 OTObjectProperties.independentVariables().asObjectProperty(model),
                 (RDFNode) null));
-        ArrayList<Feature> indepFeatures = new ArrayList<Feature>();
+        Set<Feature> indepFeatures = new LinkedHashSet<Feature>();
         while (itFeature.hasNext()) {
             FeatureSpider fspider = new FeatureSpider(model,
                     itFeature.nextStatement().getObject().as(Resource.class).getURI());
@@ -147,7 +150,7 @@ public class ModelSpider extends Tarantula<Model> {
                 OTObjectProperties.parameters().asObjectProperty(model),
                 (RDFNode) null));
 
-        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
+        Set<Parameter> parameters = new LinkedHashSet<Parameter>();
         while (itParam.hasNext()) {
             ParameterSpider paramSpider = new ParameterSpider(model, itParam.nextStatement().getObject().as(Resource.class));
             parameters.add(paramSpider.parse());

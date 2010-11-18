@@ -5,6 +5,7 @@ import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntModel;
 import java.util.ArrayList;
+import java.util.Set;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import org.opentox.toxotis.ToxOtisException;
@@ -28,9 +29,10 @@ public class Model extends OTOnlineResource<Model> implements OntologyServiceSup
     private Algorithm algorithm;
     private Feature predictedFeature;
     private Feature dependentFeature;
-    private ArrayList<Feature> independentFeatures;
-    private ArrayList<Parameter> parameters;
+    private Set<Feature> independentFeatures;
+    private Set<Parameter> parameters;
     private ArrayList<MultiParameter> multiParameters;
+    private String localCode;
 
     public Model(VRI uri) {
         super(uri);
@@ -38,6 +40,15 @@ public class Model extends OTOnlineResource<Model> implements OntologyServiceSup
 
     public Model() {
     }
+
+    public String getLocalCode() {
+        return localCode;
+    }
+
+    public void setLocalCode(String localCode) {
+        this.localCode = localCode;
+    }
+    
 
     public Algorithm getAlgorithm() {
         return algorithm;
@@ -63,19 +74,19 @@ public class Model extends OTOnlineResource<Model> implements OntologyServiceSup
         this.dependentFeature = dependentFeature;
     }
 
-    public ArrayList<Feature> getIndependentFeatures() {
+    public Set<Feature> getIndependentFeatures() {
         return independentFeatures;
     }
 
-    public void setIndependentFeatures(ArrayList<Feature> independentFeatures) {
+    public void setIndependentFeatures(Set<Feature> independentFeatures) {
         this.independentFeatures = independentFeatures;
     }
 
-    public ArrayList<Parameter> getParameters() {
+    public Set<Parameter> getParameters() {
         return parameters;
     }
 
-    public void setParameters(ArrayList<Parameter> parameters) {
+    public void setParameters(Set<Parameter> parameters) {
         this.parameters = parameters;
     }
 
@@ -111,9 +122,9 @@ public class Model extends OTOnlineResource<Model> implements OntologyServiceSup
                 indiv.addProperty(parameterProperty, param.asIndividual(model));
             }
         }
-        if (multiParameters!=null){
+        if (multiParameters != null) {
             ObjectProperty multiParameterProperty = OTObjectProperties.multiParameter().asObjectProperty(model);
-            for (MultiParameter mp : multiParameters){
+            for (MultiParameter mp : multiParameters) {
                 indiv.addProperty(multiParameterProperty, mp.asIndividual(model));
             }
         }
@@ -161,5 +172,27 @@ public class Model extends OTOnlineResource<Model> implements OntologyServiceSup
 
     public Model publishToOntService(VRI ontologyService, AuthenticationToken token) throws ToxOtisException {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Model other = (Model) obj;
+        if (getUri() != other.getUri() && (getUri() == null || !getUri().equals(other.getUri()))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 71 * hash + (getUri() != null ? getUri().hashCode() : 0);
+        return hash;
     }
 }

@@ -159,7 +159,7 @@ public class VRI implements Serializable { // Well tested!
         doProcessUri(uri);
     }
 
-    private void doProcessUri(String uri) throws URISyntaxException{
+    private void doProcessUri(String uri) throws URISyntaxException {
         new URI(uri);
         if (!uri.contains("://")) {
             uri = "http://" + uri;
@@ -423,6 +423,20 @@ public class VRI implements Serializable { // Well tested!
         return this;
     }
 
+    public VRI augment(Object... params) {
+        if (params == null || (params != null && params.length == 0)) {
+            return this;
+        }
+        String[] parametersStringArray = new String[params.length];
+        int i = 0;
+        for (Object o : params) {
+            parametersStringArray[i] = params[i].toString();
+            i++;
+        }
+        augment(parametersStringArray);
+        return this;
+    }
+
     /**
      * Returns the protocol of the URI (HTTP, HTTPS, etc)
      * @return
@@ -561,7 +575,7 @@ public class VRI implements Serializable { // Well tested!
                 }
             }
         }
-        return null;
+        return this;
     }
 
     /**
@@ -610,6 +624,4 @@ public class VRI implements Serializable { // Well tested!
             Logger.getLogger(VRI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
 }

@@ -13,7 +13,7 @@
             <generator class="native"/>
         </id>
         <discriminator column="_DISCRIM_" type="int" length="1"/>
-        <set cascade="all-delete-orphan" name="comments" table="MiComments">
+        <set cascade="all" name="comments" table="MiComments">
             <key>
                 <column name="idx"/>
             </key>
@@ -21,7 +21,7 @@
                 <column name="litId"/>
             </many-to-many>
         </set>
-        <set cascade="all-delete-orphan" name="titles" table="MiTitles">
+        <set cascade="all" name="titles" table="MiTitles">
             <key>
                 <column name="idx"/>
             </key>
@@ -29,7 +29,7 @@
                 <column name="litId"/>
             </many-to-many>
         </set>
-        <set cascade="all-delete-orphan" name="descriptions" table="MiDesc">
+        <set cascade="all" name="descriptions" table="MiDesc">
             <key>
                 <column name="idx"/>
             </key>
@@ -37,7 +37,7 @@
                 <column name="litId"/>
             </many-to-many>
         </set>
-        <set cascade="all-delete-orphan" name="identifiers" table="MiIDs">
+        <set cascade="all" name="identifiers" table="MiIDs">
             <key>
                 <column name="idx"/>
             </key>
@@ -45,7 +45,7 @@
                 <column name="litId"/>
             </many-to-many>
         </set>
-        <set cascade="all-delete-orphan" name="subjects" table="MiSubjects">
+        <set cascade="all" name="subjects" table="MiSubjects">
             <key>
                 <column name="idx"/>
             </key>
@@ -53,7 +53,7 @@
                 <column name="litId"/>
             </many-to-many>
         </set>
-        <set cascade="all-delete-orphan" name="publishers" table="MiPublishers">
+        <set cascade="all" name="publishers" table="MiPublishers">
             <key>
                 <column name="idx"/>
             </key>
@@ -61,7 +61,7 @@
                 <column name="litId"/>
             </many-to-many>
         </set>
-        <set cascade="all-delete-orphan" name="creators" table="MiCreators">
+        <set cascade="all" name="creators" table="MiCreators">
             <key>
                 <column name="idx"/>
             </key>
@@ -69,7 +69,7 @@
                 <column name="litId"/>
             </many-to-many>
         </set>
-        <set cascade="all-delete-orphan" name="contributors" table="MiContributors">
+        <set cascade="all" name="contributors" table="MiContributors">
             <key>
                 <column name="idx"/>
             </key>
@@ -77,7 +77,7 @@
                 <column name="litId"/>
             </many-to-many>
         </set>
-        <set cascade="all-delete-orphan" name="audiences" table="MiAud">
+        <set cascade="all" name="audiences" table="MiAud">
             <key>
                 <column name="idx"/>
             </key>
@@ -85,7 +85,7 @@
                 <column name="litId"/>
             </many-to-many>
         </set>
-        <set cascade="all-delete-orphan" name="hasSources" table="MiSources">
+        <set cascade="all" name="hasSources" table="MiSources">
             <key>
                 <column name="idx"/>
             </key>
@@ -93,7 +93,7 @@
                 <column name="rsId"/>
             </many-to-many>
         </set>
-        <set cascade="all-delete-orphan" name="seeAlso" table="MiSeeAlso">
+        <set cascade="all" name="seeAlso" table="MiSeeAlso">
             <key>
                 <column name="idx"/>
             </key>
@@ -101,7 +101,7 @@
                 <column name="rsId"/>
             </many-to-many>
         </set>
-        <set cascade="all-delete-orphan" name="sameAs" table="MiSameAs">
+        <set cascade="all" name="sameAs" table="MiSameAs">
             <key>
                 <column name="idx"/>
             </key>

@@ -11,7 +11,7 @@
         polymorphism="implicit"
         optimistic-lock="version"
         mutable="true">
-       
+
         <id name="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
 
         <!--    Foreign (M2O) key pointing to MetaInformation
@@ -95,7 +95,7 @@
             registration of datasets...
             Have to create an issue and tackle it...
             -->
-            <set name="ontologies" table="FeatOntol" cascade="all">
+            <set name="ontologies" table="FeatOntol" cascade="none">
                 <key column="featureUri"/>
                 <many-to-many class="org.opentox.toxotis.ontology.OntologicalClass" foreign-key="featureOntology">
                     <column name="DATATYPE_NS"/>
@@ -176,19 +176,19 @@
                 column="uri"
                 on-delete="cascade"
                 foreign-key="uri_in_algorithm_references_OTComponent"/>
-            <set name="parameters" cascade="all" table="AlgorithmParams">
+            <set name="parameters" cascade="none" table="AlgorithmParams">
                 <key
                     column="algorithmUri"
                     foreign-key="algorithmUri_ref_for_Parameters"/>
                 <many-to-many
                     class="org.opentox.toxotis.core.component.Parameter"
                     column="parameterUri"
-                    foreign-key="parameterUri_ref_for_ontologies"/>
+                    foreign-key="parameterUri_ref_for_algorithm"/>
             </set>
             <set
                 name="ontologies"
                 table="AlgorithmOntol"
-                cascade="all-delete-orphan">
+                cascade="none">
                 <key
                     column="algorithmUri"
                     foreign-key="algorithmUri_ref_for_ontologies"/>
@@ -236,6 +236,39 @@
                 <index column="dataEntryDs_IDX"/>
                 <one-to-many class="org.opentox.toxotis.core.component.DataEntry"/>
             </list>
+
+        </joined-subclass>
+
+        <joined-subclass
+            name="org.opentox.toxotis.core.component.Model">
+            <key column="uri"
+                 foreign-key="uri_in_model"
+                 on-delete="cascade"/>
+            <set name="parameters" cascade="none" table="ModelParams">
+                <key
+                    column="modelUri"
+                    foreign-key="modelUri_ref_for_Parameters"
+                    not-null="false"
+                    />
+                <many-to-many
+                    class="org.opentox.toxotis.core.component.Parameter"
+                    column="parameterUri"
+                    foreign-key="parameterUri_ref_for_model"/>
+            </set>
+            <set name="independentFeatures" cascade="none" table="ModelIndepFeatures">
+                <key
+                    column="modelUri"
+                    foreign-key="modelUri_ref_for_independentParameters"
+                    />
+                <many-to-many
+                    class="org.opentox.toxotis.core.component.Feature"
+                    column="featureUri"
+                    foreign-key="featureUri_ref_for_model"/>
+            </set>
+            <many-to-one name="dependentFeature" class="org.opentox.toxotis.core.component.Feature" cascade="none"/>
+            <many-to-one name="predictedFeature" class="org.opentox.toxotis.core.component.Feature" cascade="none"/>
+            <many-to-one name="algorithm" class="org.opentox.toxotis.core.component.Algorithm" cascade="all"/>
+            <property name="localCode" />
 
         </joined-subclass>
 

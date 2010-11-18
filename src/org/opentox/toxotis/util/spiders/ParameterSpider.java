@@ -23,8 +23,7 @@ public class ParameterSpider extends Tarantula<Parameter> {
 
     @Override
     public Parameter parse() {
-        Parameter parameter = new Parameter();
-        parameter.setUri(Services.anonymous().augment("param", UUID.randomUUID().toString()));
+        Parameter parameter = new Parameter();        
 
         /*
          * Parse parameter scope...
@@ -50,11 +49,14 @@ public class ParameterSpider extends Tarantula<Parameter> {
             parameter.setTypedValue(paramTypedValue);
         }
 
-
         MetaInfoSpider metaSpider = new MetaInfoSpider(resource, model);
         MetaInfo mi = metaSpider.parse();
         parameter.setMeta(mi);
+
         // Note: The name of the parameter is defined using the dc:title property
+        
+        // Set the parameter's URI
+        parameter.setUri(Services.anonymous().augment("param", parameter.hashCode()));
 
         return parameter;
     }
