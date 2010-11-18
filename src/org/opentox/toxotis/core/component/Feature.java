@@ -330,13 +330,7 @@ public class Feature extends OTPublishable<Feature> {
             return false;
         }
         final Feature other = (Feature) obj;
-        if (this.ontologies != other.ontologies && (this.ontologies == null || !this.ontologies.equals(other.ontologies))) {
-            return false;
-        }
-        if ((this.units == null) ? (other.units != null) : !this.units.equals(other.units)) {
-            return false;
-        }
-        if (this.admissibleValues != other.admissibleValues && (this.admissibleValues == null || !this.admissibleValues.equals(other.admissibleValues))) {
+        if (this.uri != other.uri && (this.uri == null || !this.uri.equals(other.uri))) {
             return false;
         }
         return true;

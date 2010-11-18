@@ -78,9 +78,15 @@ public class Dataset extends OTPublishable<Dataset> {
      */
     public Dataset(List<DataEntry> dataEntries) {
         this.dataEntries = dataEntries;
-    }    
+    }
 
-    
+    public Set<FeatureValue> getFeatureValues() {
+        Set<FeatureValue> featureValues = new HashSet<FeatureValue>();
+        for (DataEntry de : getDataEntries()) {
+            featureValues.addAll(de.getFeatureValues());
+        }
+        return featureValues;
+    }
 
     /**
      * Due to the large size of some dataset objects, it is advisable to use this method
@@ -93,7 +99,7 @@ public class Dataset extends OTPublishable<Dataset> {
      *      In case the serialization is not possible due to syntax errors.
      */
     public void writeRdf(javax.xml.stream.XMLStreamWriter writer) throws XMLStreamException {
-        initRdfWriter(writer);          
+        initRdfWriter(writer);
 
         writeClass(writer, OTClasses.Dataset());
         writeClass(writer, OTClasses.DataEntry());
@@ -124,7 +130,7 @@ public class Dataset extends OTPublishable<Dataset> {
         writer.writeStartElement("ot:Dataset");// #NODE_BASE: Start Base Dataset Node
         writer.writeAttribute("rdf:about", getUri().clearToken().toString()); // REFERS TO #NODE_BASE
         /* Meta-information about the dataset */
-        if (getMeta()!=null){
+        if (getMeta() != null) {
             getMeta().writeToStAX(writer);
         }
         for (DataEntry dataEntry : getDataEntries()) {
@@ -161,7 +167,7 @@ public class Dataset extends OTPublishable<Dataset> {
             writer.writeStartElement("ot:Feature"); // #NODE_FEATURE_DECLARATION
             writer.writeAttribute("rdf:about", f.getUri().clearToken().toString()); // REFERS TO #NODE_FEATURE_DECLARATION: Feature URI
 
-            
+
             featureOntologies = f.getOntologies();
             boolean explicitTypeDeclaration = false;
             if (featureOntologies != null && !featureOntologies.isEmpty()) {
@@ -492,6 +498,4 @@ public class Dataset extends OTPublishable<Dataset> {
         hash = 29 * hash + (this.dataEntries != null ? this.dataEntries.hashCode() : 0);
         return hash;
     }
-
-    
 }

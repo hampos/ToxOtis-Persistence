@@ -116,8 +116,8 @@
             <many-to-one
                 name="feature"
                 class="org.opentox.toxotis.core.component.Feature"
-                cascade="all"
-                foreign-key="feature_in_featureValue"/>
+                cascade="none"
+                foreign-key="feature_in_featureValue"/> <!-- first have to register features!!! -->
             <many-to-one
                 name="value"
                 class="org.opentox.toxotis.ontology.LiteralValue"

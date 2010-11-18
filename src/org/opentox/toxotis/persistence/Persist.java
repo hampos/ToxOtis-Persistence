@@ -71,28 +71,54 @@ public class Persist {
         metaInfoToSave.addSameAs(new ResourceValue(Services.ideaconsult(), OTClasses.Compound()));
 
         System.out.println("Loading from remote...");
-        Algorithm algorithm = new Algorithm(Services.ntua().augment("algorithm","svm")).loadFromRemote();
+        Algorithm algorithm = new Algorithm(Services.ntua().augment("algorithm", "svm")).loadFromRemote();
         System.out.println("DONE!!!");
 
         session = sf.openSession();
+        Dataset ds = new Dataset(Services.ideaconsult().augment("dataset", "9").addUrlParameter("max", "55")).loadFromRemote();
+
         session.beginTransaction();
-        session.saveOrUpdate(algorithm);
+        for (Feature f :ds.getContainedFeatures()){
+            session.saveOrUpdate(f);
+        }
         session.getTransaction().commit();
 
-
-        List resultsFoundInDB = session.createCriteria(Algorithm.class).list();
-        System.out.println("found " + resultsFoundInDB.size());
-        for (Object o : resultsFoundInDB) {
-            Algorithm ds = (Algorithm) o;
-            System.out.println(ds.getParameters());
-            System.out.println(ds.getUri());
-            System.out.println(ds.getOntologies());
-            System.out.println(ds.getMeta());
+        session.beginTransaction();
+        
+        Set<FeatureValue> ff = ds.getFeatureValues();
+        for (FeatureValue p : ff){
+                 session.saveOrUpdate(p);
         }
+        session.getTransaction().commit();
+
+        session.beginTransaction();
+        session.save(ds);
+        session.getTransaction().commit();
+
+        //Possible successful procedure:
+        /*
+         * 0. (Possibly not needed!) Register features first!
+         * 1. Register all feature value ( we need method getAllFeatureValues() )
+         * 2. Register all dataentries and then the dataset or may, the dataset right away!
+         */
+        // Note: Throughout a session uuids are imutable
+
+//
+//        List resultsFoundInDB = session.createCriteria(Algorithm.class).list();
+//        System.out.println("found " + resultsFoundInDB.size());
+//        for (Object o : resultsFoundInDB) {
+//            Algorithm a = (Algorithm) o;
+//            System.out.println(a.getParameters());
+//            System.out.println(a.getUri());
+//            System.out.println(a.getOntologies());
+//            System.out.println(a.getOntologies().iterator().next().getSuperClasses().iterator().next().getUri());
+//            System.out.println(a.getMeta());
+//        }
+
+        session.close();
 
     }
 }
-
 //        Όταν μεγαλώσω θέλω,
 //        θέλω να γίνω 83 χρονών
 //        τσατσά σ'ένα μπουρδέλο

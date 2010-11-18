@@ -34,6 +34,7 @@ public class FeatureValue extends OTComponent<FeatureValue> {
     }
 
     public FeatureValue() {
+        super();
     }
 
     public FeatureValue(Feature feature, LiteralValue value) {
