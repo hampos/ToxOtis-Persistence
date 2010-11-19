@@ -216,7 +216,7 @@
                  foreign-key="uri_in_dataEntry"
                  on-delete="cascade"/>
             <many-to-one name="conformer" class="org.opentox.toxotis.core.component.Compound" cascade="all"/>
-            <list name="featureValues" cascade="all" table="DataEntryFeatVal">
+            <list name="featureValues" cascade="none" table="DataEntryFeatVal">
                 <key column="dataEntryUri" foreign-key="dataEntryUri_in_DataEntryFeatVal"/>
                 <index column="featureVal_IDX"/>
                 <many-to-many class="org.opentox.toxotis.core.component.FeatureValue" column="featureValUri"
@@ -268,8 +268,8 @@
             <many-to-one name="dependentFeature" class="org.opentox.toxotis.core.component.Feature" cascade="none"/>
             <many-to-one name="predictedFeature" class="org.opentox.toxotis.core.component.Feature" cascade="none"/>
             <many-to-one name="algorithm" class="org.opentox.toxotis.core.component.Algorithm" cascade="all"/>
-            <property name="localCode" />
-
+            <property name="localCode" type="string"/>
+            <property name="dataset" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
         </joined-subclass>
 
     </class>

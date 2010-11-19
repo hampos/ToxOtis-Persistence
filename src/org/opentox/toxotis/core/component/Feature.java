@@ -339,9 +339,9 @@ public class Feature extends OTPublishable<Feature> {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 19 * hash + (this.ontologies != null ? this.ontologies.hashCode() : 0);
+        hash = 19 * hash + (this.getUri() != null ? this.getUri().toString().hashCode() : 0);
         hash = 19 * hash + (this.units != null ? this.units.hashCode() : 0);
-        hash = 19 * hash + (this.admissibleValues != null ? this.admissibleValues.hashCode() : 0);
+//        hash = 19 * hash + (this.admissibleValues != null ? this.admissibleValues.hashCode() : 0);
         return hash;
     }
 

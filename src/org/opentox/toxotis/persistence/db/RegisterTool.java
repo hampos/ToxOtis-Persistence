@@ -94,4 +94,10 @@ public class RegisterTool {
         session.getTransaction().commit();
         session.clear();
     }
+
+    public static void storeBibTeX(Session session){
+        session.beginTransaction();
+        session.getTransaction().commit();
+        session.clear();
+    }
 }

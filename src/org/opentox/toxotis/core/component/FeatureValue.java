@@ -2,7 +2,6 @@ package org.opentox.toxotis.core.component;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
-import java.util.UUID;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import org.opentox.toxotis.client.VRI;
@@ -22,13 +21,12 @@ public class FeatureValue extends OTComponent<FeatureValue> {
 
     private Feature feature;
     private LiteralValue value;
-    private final UUID uuid = UUID.randomUUID();
     private static final String DISCRIMINATOR = "featureValue";
 
     @Override
     public VRI getUri() {
         if (uri == null) {
-            uri = Services.anonymous().augment(DISCRIMINATOR, uuid.toString());
+            uri = Services.anonymous().augment(DISCRIMINATOR, hashCode());
         }
         return uri;
     }
@@ -102,5 +100,4 @@ public class FeatureValue extends OTComponent<FeatureValue> {
         hash = 67 * hash + (this.value != null ? this.value.hashCode() : 0);
         return hash;
     }
-    
 }

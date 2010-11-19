@@ -159,7 +159,7 @@ public class LiteralValue<T> implements Serializable {
     public int hashCode() {
         int hash = 7;
         hash = 71 * hash + (this.value != null ? this.value.toString().hashCode() : 0);
-        hash = 71 * hash + (this.type != null ? this.type.hashCode() : 0);
+        hash = 71 * hash + (this.type != null ? this.type.getURI().hashCode() : 0);
         return hash;
     }
 
