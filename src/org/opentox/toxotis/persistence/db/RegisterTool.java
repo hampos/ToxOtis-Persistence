@@ -7,6 +7,7 @@ import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.ontology.collection.OTAlgorithmTypes;
 import org.opentox.toxotis.ontology.collection.OTClasses;
 import org.opentox.toxotis.ontology.impl.OntologicalClassImpl;
+import org.opentox.toxotis.util.aa.User;
 
 /**
  *
@@ -14,6 +15,13 @@ import org.opentox.toxotis.ontology.impl.OntologicalClassImpl;
  * @author Charalampos Chomenides
  */
 public class RegisterTool {
+
+    public static void storeUser(User user, Session session) {
+        session.beginTransaction();
+        session.saveOrUpdate(user);
+        session.getTransaction().commit();
+        session.clear();
+    }
 
     public static void storeAlgorithm(Algorithm a, Session session) {
         session.beginTransaction();
