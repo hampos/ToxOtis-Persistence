@@ -146,19 +146,13 @@ public class LiteralValue<T> implements Serializable {
             return false;
         }
         final LiteralValue<T> other = (LiteralValue<T>) obj;
-        if (this.value != other.value && (this.value == null || !this.value.equals(other.value))) {
-            return false;
-        }
-        if (this.type != other.type && (this.type == null || !this.type.equals(other.type))) {
-            return false;
-        }
-        return true;
+        return this.getHash() == other.getHash();
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 71 * hash + (this.value != null ? this.value.toString().hashCode() : 0);
+        hash = 71 * hash + (this.value != null ? this.value.toString().trim().hashCode() : 0);
         hash = 71 * hash + (this.type != null ? this.type.getURI().hashCode() : 0);
         return hash;
     }
@@ -167,11 +161,10 @@ public class LiteralValue<T> implements Serializable {
         return model.createTypedLiteral(getValue(), getType());
     }
 
-    public int getHash(){
-        return 0;
+    public long getHash() {
+        return (value != null ? value.toString().trim().hashCode() : 0)
+                + 7 * (type != null ? type.toString().trim().hashCode() : 0);
     }
 
-    public void setHash(int hashCode){
-        
-    }
+    public void setHash(long hashCode) {/* Do nothing! */ }
 }

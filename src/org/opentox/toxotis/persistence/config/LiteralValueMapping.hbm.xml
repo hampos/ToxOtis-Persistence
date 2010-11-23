@@ -6,9 +6,7 @@
         Index not associated with a Java variable; stands for separating literals
         coming from different meta-information or in general resources.
         -->
-    <id column="litId" type="int">
-      <generator class="native"/>
-    </id>
+    <id name="hash" column="litId" type="long"/>
     <!--
         LiteralValues are stored in the database in a table
         with two columns: VALUE and DATATYPE. Initially the idea was about having

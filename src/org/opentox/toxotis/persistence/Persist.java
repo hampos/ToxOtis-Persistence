@@ -3,6 +3,7 @@ package org.opentox.toxotis.persistence;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -12,6 +13,7 @@ import org.opentox.toxotis.core.component.Algorithm;
 import org.opentox.toxotis.core.component.Dataset;
 import org.opentox.toxotis.core.component.Model;
 import org.opentox.toxotis.core.component.Parameter;
+import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.persistence.db.RegisterTool;
 import org.opentox.toxotis.persistence.util.HibernateUtil;
 
@@ -23,6 +25,7 @@ import org.opentox.toxotis.persistence.util.HibernateUtil;
 public class Persist {
 
     public static void main(String[] args) throws Exception {
+        org.apache.log4j.PropertyConfigurator.configure("src/org/opentox/toxotis/persistence/config/log4j.properties");
         SessionFactory sf = HibernateUtil.getSessionFactory();
         Session session = sf.openSession();
 
@@ -56,7 +59,7 @@ public class Persist {
 
 
         System.out.println("Loading Algorithm");
-        Algorithm algorithm = new Algorithm(Services.ntua().augment("algorithm", "filter")).loadFromRemote();
+        Algorithm algorithm = new Algorithm(Services.ntua().augment("algorithm", "svm")).loadFromRemote();
         System.out.println("Algorithm Loaded");
         System.out.println("Storing Algorithm");
         RegisterTool.storeAlgorithm(algorithm, session);
@@ -68,19 +71,19 @@ public class Persist {
 //        System.out.println("Storing Dataset");
 //        RegisterTool.storeDataset(d, session);
 //        System.out.println("Dataset registered successfully!");
-
+//
         System.out.println("Loading Model");
         Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote();
         System.out.println("Model Loaded");
         System.out.println("Storing Model");
-        RegisterTool.storeModel(model, session);        
+        RegisterTool.storeModel(model, session);
 
 
-        List resultsFoundInDB = session.createCriteria(Model.class).list();
+        List resultsFoundInDB = session.createCriteria(Algorithm.class).list();
         System.out.println("found " + resultsFoundInDB.size());
         for (Object o : resultsFoundInDB) {
-            Model mod = (Model) o;
-            for (Parameter pp : mod.getParameters()) {
+            Algorithm alg = (Algorithm) o;
+            for (Parameter pp : alg.getParameters()) {
                 System.out.println(pp.getMeta().getComments());
             }
         }
