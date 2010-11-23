@@ -1,5 +1,6 @@
 package org.opentox.toxotis.persistence.db;
 
+import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.Session;
 import org.opentox.toxotis.core.component.*;
@@ -41,7 +42,9 @@ public class RegisterTool {
         for (Feature ft : model.getIndependentFeatures()) {
             session.saveOrUpdate(ft);
         }
-        session.saveOrUpdate(model.getCreatedBy());
+        if (model.getCreatedBy() != null) {
+            session.saveOrUpdate(model.getCreatedBy());
+        }
         session.saveOrUpdate(model.getDependentFeature());
         session.saveOrUpdate(model.getPredictedFeature());
         session.saveOrUpdate(model);
@@ -53,6 +56,7 @@ public class RegisterTool {
         session.beginTransaction();
         for (Feature f : ds.getContainedFeatures()) {
             session.saveOrUpdate(f);
+            session.flush();
         }
         session.getTransaction().commit();
         session.clear();
