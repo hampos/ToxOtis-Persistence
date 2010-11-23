@@ -16,6 +16,7 @@ import org.opentox.toxotis.ontology.MetaInfo;
 import org.opentox.toxotis.ontology.collection.OTClasses;
 import org.opentox.toxotis.ontology.collection.OTObjectProperties;
 import org.opentox.toxotis.util.aa.AuthenticationToken;
+import org.opentox.toxotis.util.aa.User;
 import org.opentox.toxotis.util.spiders.ModelSpider;
 
 /**
@@ -33,6 +34,7 @@ public class Model extends OTOnlineResource<Model> implements OntologyServiceSup
     private Set<Parameter> parameters;
     private ArrayList<MultiParameter> multiParameters;
     private String localCode;
+    private User createdBy;
 
     public Model(VRI uri) {
         super(uri);
@@ -48,7 +50,6 @@ public class Model extends OTOnlineResource<Model> implements OntologyServiceSup
     public void setLocalCode(String localCode) {
         this.localCode = localCode;
     }
-    
 
     public Algorithm getAlgorithm() {
         return algorithm;
@@ -56,6 +57,14 @@ public class Model extends OTOnlineResource<Model> implements OntologyServiceSup
 
     public void setAlgorithm(Algorithm algorithm) {
         this.algorithm = algorithm;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     public VRI getDataset() {

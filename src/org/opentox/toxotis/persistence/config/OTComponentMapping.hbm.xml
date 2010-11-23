@@ -95,7 +95,7 @@
             registration of datasets...
             Have to create an issue and tackle it...
             -->
-            <set name="ontologies" table="FeatOntol" cascade="none">
+            <set name="ontologies" table="FeatOntol" cascade="delete">
                 <key column="featureUri"/>
                 <many-to-many class="org.opentox.toxotis.ontology.OntologicalClass" foreign-key="featureOntology">
                     <column name="DATATYPE_NS"/>
@@ -116,7 +116,7 @@
             <many-to-one
                 name="feature"
                 class="org.opentox.toxotis.core.component.Feature"
-                cascade="none"
+                cascade="delete"
                 foreign-key="feature_in_featureValue"/> <!-- first have to register features!!! -->
             <many-to-one
                 name="value"
@@ -176,7 +176,7 @@
                 column="uri"
                 on-delete="cascade"
                 foreign-key="uri_in_algorithm_references_OTComponent"/>
-            <set name="parameters" cascade="none" table="AlgorithmParams">
+            <set name="parameters" cascade="delete" table="AlgorithmParams">
                 <key
                     column="algorithmUri"
                     foreign-key="algorithmUri_ref_for_Parameters"/>
@@ -188,7 +188,7 @@
             <set
                 name="ontologies"
                 table="AlgorithmOntol"
-                cascade="none">
+                cascade="delete">
                 <key
                     column="algorithmUri"
                     foreign-key="algorithmUri_ref_for_ontologies"/>
@@ -216,7 +216,7 @@
                  foreign-key="uri_in_dataEntry"
                  on-delete="cascade"/>
             <many-to-one name="conformer" class="org.opentox.toxotis.core.component.Compound" cascade="all"/>
-            <list name="featureValues" cascade="none" table="DataEntryFeatVal">
+            <list name="featureValues" cascade="delete" table="DataEntryFeatVal">
                 <key column="dataEntryUri" foreign-key="dataEntryUri_in_DataEntryFeatVal"/>
                 <index column="featureVal_IDX"/>
                 <many-to-many class="org.opentox.toxotis.core.component.FeatureValue" column="featureValUri"
@@ -231,7 +231,7 @@
                  foreign-key="uri_in_dataset"
                  on-delete="cascade"/>
             <list
-                name="dataEntries" cascade="all">
+                name="dataEntries" cascade="all, delete">
                 <key column="datasetUri"/>
                 <index column="dataEntryDs_IDX"/>
                 <one-to-many class="org.opentox.toxotis.core.component.DataEntry"/>
@@ -244,7 +244,7 @@
             <key column="uri"
                  foreign-key="uri_in_model"
                  on-delete="cascade"/>
-            <set name="parameters" cascade="none" table="ModelParams">
+            <set name="parameters" cascade="delete" table="ModelParams">
                 <key
                     column="modelUri"
                     foreign-key="modelUri_ref_for_Parameters"
@@ -255,7 +255,7 @@
                     column="parameterUri"
                     foreign-key="parameterUri_ref_for_model"/>
             </set>
-            <set name="independentFeatures" cascade="none" table="ModelIndepFeatures">
+            <set name="independentFeatures" cascade="delete" table="ModelIndepFeatures">
                 <key
                     column="modelUri"
                     foreign-key="modelUri_ref_for_independentParameters"
@@ -265,8 +265,9 @@
                     column="featureUri"
                     foreign-key="featureUri_ref_for_model"/>
             </set>
-            <many-to-one name="dependentFeature" class="org.opentox.toxotis.core.component.Feature" cascade="none"/>
-            <many-to-one name="predictedFeature" class="org.opentox.toxotis.core.component.Feature" cascade="none"/>
+            <many-to-one name="createdBy" class="org.opentox.toxotis.util.aa.User" cascade="delete"/>
+            <many-to-one name="dependentFeature" class="org.opentox.toxotis.core.component.Feature" cascade="delete"/>
+            <many-to-one name="predictedFeature" class="org.opentox.toxotis.core.component.Feature" cascade="delete"/>
             <many-to-one name="algorithm" class="org.opentox.toxotis.core.component.Algorithm" cascade="all"/>
             <property name="localCode" type="string"/>
             <property name="dataset" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>

@@ -8,12 +8,14 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.opentox.toxotis.ErrorCause;
 import org.opentox.toxotis.ToxOtisException;
 import org.opentox.toxotis.client.secure.SecurePostClient;
 import org.opentox.toxotis.client.collection.Services;
+import org.opentox.toxotis.persistence.db.RegisterTool;
+import org.opentox.toxotis.persistence.util.HibernateUtil;
 
 /**
  * <p align=justify>OpenTox specific implementation regarding the token provided by the OpenSSO server.
@@ -100,8 +102,8 @@ public class AuthenticationToken {
             poster.post();
             int status = poster.getResponseCode();
             if (status >= 400) {
-                throw new ToxOtisException("Error while authenticating user at " +
-                        poster.getUri() + ". Status code : " + status);
+                throw new ToxOtisException("Error while authenticating user at "
+                        + poster.getUri() + ". Status code : " + status);
             }
 
             String response = poster.getResponseText();
@@ -389,7 +391,7 @@ public class AuthenticationToken {
                     line = reader.readLine();
                     if (line != null) {
                         line = line.trim();
-                        u.setUid(line.replaceAll(valueKey, ""));
+                        u.setUid(line.replaceAll(valueKey, "") + "@" + Services.SSO_HOST);
                     }
                 } else if (line.equals(String.format(nameKey, "mail"))) {
                     line = reader.readLine();
@@ -477,5 +479,14 @@ public class AuthenticationToken {
         sb.append("\n");
         sb.append("Status              : " + getStatus());
         return new String(sb);
+    }
+
+    public static void main(String... art) throws ToxOtisException {
+        AuthenticationToken at = new AuthenticationToken("hampos", "arabela");
+        User u = at.getUser();
+        SessionFactory sf = HibernateUtil.getSessionFactory();
+        Session session = sf.openSession();
+        RegisterTool.storeUser(u, session);
+        System.out.println(u);
     }
 }

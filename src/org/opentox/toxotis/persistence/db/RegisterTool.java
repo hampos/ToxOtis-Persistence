@@ -7,6 +7,7 @@ import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.ontology.collection.OTAlgorithmTypes;
 import org.opentox.toxotis.ontology.collection.OTClasses;
 import org.opentox.toxotis.ontology.impl.OntologicalClassImpl;
+import org.opentox.toxotis.util.aa.User;
 
 /**
  *
@@ -14,6 +15,13 @@ import org.opentox.toxotis.ontology.impl.OntologicalClassImpl;
  * @author Charalampos Chomenides
  */
 public class RegisterTool {
+
+    public static void storeUser(User user, Session session) {
+        session.beginTransaction();
+        session.saveOrUpdate(user);
+        session.getTransaction().commit();
+        session.clear();
+    }
 
     public static void storeAlgorithm(Algorithm a, Session session) {
         session.beginTransaction();
@@ -25,17 +33,18 @@ public class RegisterTool {
         session.clear();
     }
 
-    public static void storeModel(Model a, Session session) {
+    public static void storeModel(Model model, Session session) {
         session.beginTransaction();
-        for (Parameter p : a.getParameters()) {
+        for (Parameter p : model.getParameters()) {
             session.saveOrUpdate(p);
         }
-        for (Feature ft : a.getIndependentFeatures()) {
+        for (Feature ft : model.getIndependentFeatures()) {
             session.saveOrUpdate(ft);
         }
-        session.saveOrUpdate(a.getDependentFeature());
-        session.saveOrUpdate(a.getPredictedFeature());
-        session.saveOrUpdate(a);
+        session.saveOrUpdate(model.getCreatedBy());
+        session.saveOrUpdate(model.getDependentFeature());
+        session.saveOrUpdate(model.getPredictedFeature());
+        session.saveOrUpdate(model);
         session.getTransaction().commit();
         session.clear();
     }
@@ -95,7 +104,7 @@ public class RegisterTool {
         session.clear();
     }
 
-    public static void storeBibTeX(Session session){
+    public static void storeBibTeX(Session session) {
         session.beginTransaction();
         session.getTransaction().commit();
         session.clear();

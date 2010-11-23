@@ -37,6 +37,7 @@ public class Persist {
                 stmt.addBatch("ALTER TABLE FeatOntol DROP PRIMARY KEY");
                 stmt.addBatch("ALTER TABLE FeatOntol ADD `ID_W` INT NOT NULL AUTO_INCREMENT PRIMARY KEY");
                 stmt.addBatch("ALTER TABLE OTComponent ADD `created` TIMESTAMP NOT NULL DEFAULT NOW()");
+                stmt.addBatch("ALTER TABLE User ADD `created` TIMESTAMP NOT NULL DEFAULT NOW()");
                 stmt.executeBatch();
             } catch (HibernateException hbe) {
                 hbe.printStackTrace();
@@ -60,19 +61,19 @@ public class Persist {
         System.out.println("Storing Algorithm");
         RegisterTool.storeAlgorithm(algorithm, session);
         System.out.println("Algorithm registered successfully!");
-
-        System.out.println("Loading Dataset");
-        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "6").addUrlParameter("max", 100)).loadFromRemote();
-        System.out.println("Dataset Loaded");
-        System.out.println("Storing Dataset");
-        RegisterTool.storeDataset(d, session);
-        System.out.println("Dataset registered successfully!");
+//
+//        System.out.println("Loading Dataset");
+//        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "6").addUrlParameter("max", 100)).loadFromRemote();
+//        System.out.println("Dataset Loaded");
+//        System.out.println("Storing Dataset");
+//        RegisterTool.storeDataset(d, session);
+//        System.out.println("Dataset registered successfully!");
 
         System.out.println("Loading Model");
         Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote();
         System.out.println("Model Loaded");
         System.out.println("Storing Model");
-        RegisterTool.storeModel(model, session);
+        RegisterTool.storeModel(model, session);        
 
 
         List resultsFoundInDB = session.createCriteria(Model.class).list();

@@ -11,6 +11,7 @@ import org.opentox.toxotis.ErrorCause;
 import org.opentox.toxotis.ToxOtisException;
 import org.opentox.toxotis.client.collection.Media;
 import org.opentox.toxotis.ontology.impl.SimpleOntModelImpl;
+import org.opentox.toxotis.util.aa.AuthenticationToken;
 
 /**
  * An abstract class providing necessary methods for the implementation of a
@@ -78,6 +79,10 @@ public abstract class AbstractClient implements Closeable {
         }
         headerValues.put(paramName, paramValue);
         return this;
+    }
+
+    public AbstractClient authorize(AuthenticationToken token) {
+        return addHeaderParameter(RequestHeaders.AUTHORIZATION, token.getTokenUrlEncoded());
     }
 
     /**
