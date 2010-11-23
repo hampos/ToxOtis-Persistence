@@ -25,6 +25,7 @@ import org.opentox.toxotis.persistence.util.HibernateUtil;
 public class Persist {
 
     public static void main(String[] args) throws Exception {
+        org.apache.log4j.LogManager.resetConfiguration();
         org.apache.log4j.PropertyConfigurator.configure("src/org/opentox/toxotis/persistence/config/log4j.properties");
         SessionFactory sf = HibernateUtil.getSessionFactory();
         Session session = sf.openSession();
