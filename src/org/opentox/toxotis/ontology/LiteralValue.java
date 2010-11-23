@@ -162,8 +162,9 @@ public class LiteralValue<T> implements Serializable {
     }
 
     public long getHash() {
-        return (value != null ? value.toString().trim().hashCode() : 0)
+        long hash =  (value != null ? value.toString().trim().hashCode() : 0)
                 + 7 * (type != null ? type.toString().trim().hashCode() : 0);
+        return hash;
     }
 
     public void setHash(long hashCode) {/* Do nothing! */ }
