@@ -166,4 +166,12 @@ public class LiteralValue<T> implements Serializable {
     public Literal inModel(OntModel model) {
         return model.createTypedLiteral(getValue(), getType());
     }
+
+    public int getHash(){
+        return 0;
+    }
+
+    public void setHash(int hashCode){
+        
+    }
 }

@@ -37,6 +37,7 @@ public class Persist {
                 stmt.addBatch("ALTER TABLE FeatOntol DROP PRIMARY KEY");
                 stmt.addBatch("ALTER TABLE FeatOntol ADD `ID_W` INT NOT NULL AUTO_INCREMENT PRIMARY KEY");
                 stmt.addBatch("ALTER TABLE OTComponent ADD `created` TIMESTAMP NOT NULL DEFAULT NOW()");
+                stmt.addBatch("ALTER TABLE User ADD `created` TIMESTAMP NOT NULL DEFAULT NOW()");
                 stmt.executeBatch();
             } catch (HibernateException hbe) {
                 hbe.printStackTrace();

@@ -11,6 +11,7 @@ import org.opentox.toxotis.core.OTOnlineResource;
 import org.opentox.toxotis.ontology.collection.OTClasses;
 import org.opentox.toxotis.ontology.collection.OTDatatypeProperties;
 import org.opentox.toxotis.ontology.collection.OTObjectProperties;
+import org.opentox.toxotis.util.aa.User;
 import org.opentox.toxotis.util.spiders.TaskSpider;
 
 /**
@@ -42,13 +43,16 @@ public class Task extends OTOnlineResource<Task> {
         RUNNING,
         COMPLETED,
         CANCELLED,
-        ERROR;
+        ERROR,
+        REJECTED,
+         QUEUED;
     }
     private VRI resultUri;
     private Status hasStatus;
     private float percentageCompleted = -1;
     private ErrorReport errorReport;
     private float httpStatus = -1;
+    private User createdBy;
 
     public Task() {
         super();
@@ -56,6 +60,14 @@ public class Task extends OTOnlineResource<Task> {
 
     public Task(VRI uri) {
         super(uri);
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     /**
@@ -148,13 +160,11 @@ public class Task extends OTOnlineResource<Task> {
         sb.append("Status      : ");
         sb.append(hasStatus);
         sb.append("\n");
-        if (resultUri!=null){
+        if (resultUri != null) {
             sb.append("Result URI  : ");
-        sb.append(resultUri);
-        sb.append("\n");
+            sb.append(resultUri);
+            sb.append("\n");
         }
         return new String(sb);
     }
-
-
 }
