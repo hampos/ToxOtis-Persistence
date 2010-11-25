@@ -268,7 +268,7 @@
             <many-to-one name="createdBy" class="org.opentox.toxotis.util.aa.User"/> 
             <many-to-one name="dependentFeature" class="org.opentox.toxotis.core.component.Feature" cascade="delete"/>
             <many-to-one name="predictedFeature" class="org.opentox.toxotis.core.component.Feature" cascade="delete"/>
-            <many-to-one name="algorithm" class="org.opentox.toxotis.core.component.Algorithm" cascade="all"/>
+            <many-to-one name="algorithm" class="org.opentox.toxotis.core.component.Algorithm" cascade="delete"/>
             <property name="localCode" type="string"/>
             <property name="dataset" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
         </joined-subclass>

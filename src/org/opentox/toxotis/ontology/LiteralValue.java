@@ -159,11 +159,11 @@ public class LiteralValue<T> implements Serializable {
         return model.createTypedLiteral(getValue(), getType());
     }
 
-    public int getHash() {
-        if (value!=null && type!=null){
-            return value.hashCode();
-        }
-        return super.hashCode();
+
+    public long getHash() {
+        long hash =  (value != null ? value.toString().trim().hashCode() : 0)
+                + 7 * (type != null ? type.toString().trim().hashCode() : 0);
+        return hash;
     }
 
     public void setHash(int hashCode) {/* Do nothing! */ }

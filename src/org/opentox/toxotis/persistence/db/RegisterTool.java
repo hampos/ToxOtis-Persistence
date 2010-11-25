@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.Session;
 import org.opentox.toxotis.core.component.*;
+import org.opentox.toxotis.ontology.LiteralValue;
 import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.ontology.collection.OTAlgorithmTypes;
 import org.opentox.toxotis.ontology.collection.OTClasses;
@@ -28,25 +29,47 @@ public class RegisterTool {
         session.beginTransaction();
         for (Parameter p : a.getParameters()) {
             session.saveOrUpdate(p);
+            session.flush();
+            session.evict(p);
         }
         session.saveOrUpdate(a);
+        session.flush();
+        session.evict(a);
         session.getTransaction().commit();
         session.clear();
     }
 
     public static void storeModel(Model model, Session session) {
         session.beginTransaction();
+
+        session.saveOrUpdate(model.getAlgorithm());
+        session.flush();
+        session.evict(model.getAlgorithm());
+
         for (Parameter p : model.getParameters()) {
             session.saveOrUpdate(p);
+            session.flush();
+            session.evict(p);
         }
+        
         for (Feature ft : model.getIndependentFeatures()) {
             session.saveOrUpdate(ft);
+            session.flush();
+            session.evict(ft);
         }
         if (model.getCreatedBy() != null) {
             session.saveOrUpdate(model.getCreatedBy());
+            session.flush();
+            session.evict(model.getCreatedBy());
         }
         session.saveOrUpdate(model.getDependentFeature());
+        session.flush();
+        session.evict(model.getDependentFeature());
+
         session.saveOrUpdate(model.getPredictedFeature());
+        session.flush();
+        session.evict(model.getPredictedFeature());
+
         session.saveOrUpdate(model);
         session.getTransaction().commit();
         session.clear();
@@ -57,6 +80,7 @@ public class RegisterTool {
         for (Feature f : ds.getContainedFeatures()) {
             session.saveOrUpdate(f);
             session.flush();
+            session.evict(f);
         }
         session.getTransaction().commit();
         session.clear();
@@ -65,6 +89,8 @@ public class RegisterTool {
         Set<FeatureValue> ff = ds.getFeatureValues();
         for (FeatureValue p : ff) {
             session.saveOrUpdate(p);
+            session.flush();
+            session.evict(p);
         }
         session.getTransaction().commit();
         session.clear();
@@ -72,6 +98,7 @@ public class RegisterTool {
         session.beginTransaction();
         session.saveOrUpdate(ds);
         session.getTransaction().commit();
+        session.clear();
     }
 
     public static void storeAllOntClasses(Session session) {
