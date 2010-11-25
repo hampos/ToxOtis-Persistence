@@ -12,7 +12,7 @@
         optimistic-lock="version"
         mutable="true">
 
-        <id name="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
+        <id name="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>        
 
         <!--    Foreign (M2O) key pointing to MetaInformation
                 Question: is unique="true" correct here???

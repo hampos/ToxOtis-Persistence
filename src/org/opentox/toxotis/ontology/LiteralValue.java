@@ -166,7 +166,7 @@ public class LiteralValue<T> implements Serializable {
         return hash;
     }
 
-    public void setHash(int hashCode) {/* Do nothing! */ }
+    public void setHash(long hashCode) {/* Do nothing! */ }
 
     public static void main(String... ars) {
         LiteralValue lv = new LiteralValue();

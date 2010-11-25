@@ -68,12 +68,12 @@ public class Persist {
         RegisterTool.storeAlgorithm(algorithm, session);
         System.out.println("Algorithm registered successfully!");
 
-//        System.out.println("Loading Dataset");
-//        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "6").addUrlParameter("max", 100)).loadFromRemote();
-//        System.out.println("Dataset Loaded");
-//        System.out.println("Storing Dataset");
-//        RegisterTool.storeDataset(d, session);
-//        System.out.println("Dataset registered successfully!");
+        System.out.println("Loading Dataset");
+        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "6").addUrlParameter("max", 100)).loadFromRemote();
+        System.out.println("Dataset Loaded");
+        System.out.println("Storing Dataset");
+        RegisterTool.storeDataset(d, session);
+        System.out.println("Dataset registered successfully!");
 
         System.out.println("Loading Model");
         Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote();
@@ -85,6 +85,7 @@ public class Persist {
         System.out.println("found " + resultsFoundInDB.size());
         for (Object o : resultsFoundInDB) {
             Algorithm alg = (Algorithm) o;
+            System.out.println(alg.getMeta().getComments());
             for (Parameter pp : alg.getParameters()) {
                 System.out.println(pp.getMeta().getComments());
             }

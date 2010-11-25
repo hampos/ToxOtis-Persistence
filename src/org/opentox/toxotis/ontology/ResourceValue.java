@@ -11,12 +11,13 @@ import org.opentox.toxotis.ontology.collection.OTClasses;
  * @author Pantelis Sopasakis
  * @author Charalampos Chomenides
  */
-public class ResourceValue implements Serializable{
+public class ResourceValue implements Serializable {
 
     private VRI uri;
     private OntologicalClass ontologicalClass;
 
-    private ResourceValue(){}
+    private ResourceValue() {
+    }
 
     public ResourceValue(VRI uri, OntologicalClass ontologicalClass) {
         this.uri = uri;
@@ -39,9 +40,9 @@ public class ResourceValue implements Serializable{
         this.uri = uri;
     }
 
-    public Resource inModel(OntModel model){
-        return model.createResource(getUri()!=null?getUri().toString():null,
-                getOntologicalClass()!=null?getOntologicalClass().inModel(model):OTClasses.Thing().inModel(model));
+    public Resource inModel(OntModel model) {
+        return model.createResource(getUri() != null ? getUri().toString() : null,
+                getOntologicalClass() != null ? getOntologicalClass().inModel(model) : OTClasses.Thing().inModel(model));
     }
 
     @Override
@@ -49,27 +50,24 @@ public class ResourceValue implements Serializable{
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (ResourceValue.class != obj.getClass()) {
             return false;
         }
         final ResourceValue other = (ResourceValue) obj;
-        if (this.uri != other.uri && (this.uri == null || !this.uri.equals(other.uri))) {
-            return false;
-        }
-        if (this.ontologicalClass != other.ontologicalClass && (this.ontologicalClass == null || !this.ontologicalClass.equals(other.ontologicalClass))) {
-            return false;
-        }
-        return true;
+        boolean isEq = getHash() == other.getHash();
+        return isEq;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + (this.uri != null ? this.uri.hashCode() : 0);
-        hash = 37 * hash + (this.ontologicalClass != null ? this.ontologicalClass.hashCode() : 0);
+        return (int) getHash();
+    }
+
+    public long getHash() {
+        long hash = (this.uri != null ? uri.toString().trim().hashCode() : 0);
+        hash += 7 * (ontologicalClass != null ? ontologicalClass.getUri().hashCode() : 0);
         return hash;
     }
 
-
-
+    public void setHash(long hashCode) {/* Do nothing! */ }
 }
