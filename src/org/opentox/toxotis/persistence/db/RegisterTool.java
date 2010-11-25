@@ -103,16 +103,14 @@ public class RegisterTool {
         User createdBy = task.getCreatedBy();
         if (createdBy!=null){
             session.saveOrUpdate(createdBy);
-//          
-
         }
         ErrorReport er = task.getErrorReport();
         if (er!=null){
             session.saveOrUpdate(er);
             session.flush();
             session.evict(er);
-
         }
+        session.saveOrUpdate(task);
         session.getTransaction().commit();
         session.clear();
     }

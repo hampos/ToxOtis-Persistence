@@ -71,7 +71,7 @@ public class Persist {
         System.out.println();
 
         System.out.println("Loading Dataset");
-        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "6").addUrlParameter("max", 20)).loadFromRemote();
+        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "6").addUrlParameter("max", 0)).loadFromRemote();
         System.out.println("Dataset Loaded");
         System.out.println("Storing Dataset");
         RegisterTool.storeDataset(d, session);
@@ -86,12 +86,16 @@ public class Persist {
         System.out.println("Model registered successfully!");
         System.out.println();
 
-        System.out.println("Loading Task");
-        Task task = new Task(Services.ntua().augment("task", "68d471ad-0287-4f6e-a200-244d0234e8a1")).loadFromRemote();
-        System.out.println("Task Loaded");
-        System.out.println("Storing Task");
-        RegisterTool.storeTask(session, task);
-        System.out.println("Task registered successfully!");
+        System.out.println("Loading Tasks");
+        Task task_complete = new Task(Services.ntua().augment("task", "68d471ad-0287-4f6e-a200-244d0234e8a1")).loadFromRemote();
+        System.out.println("Task #1 Loaded");
+        Task task_error = new Task(Services.ntua().augment("task", "0980cbb3-a4a8-4a89-8538-51992d2fc67f")).loadFromRemote();
+        System.out.println("Task #2 Loaded");
+        System.out.println("Storing Tasks");
+        RegisterTool.storeTask(session, task_complete);
+        System.out.println("Task #1 registered successfully!");
+        RegisterTool.storeTask(session, task_error);
+        System.out.println("Task #2 registered successfully!");
         System.out.println();
 
         List resultsFoundInDB = session.createCriteria(Algorithm.class).list();
