@@ -33,9 +33,9 @@ public class LiteralValue<T> implements Serializable {
 
     /** The value */
     private T value;
-    private Class<?> clazz;
+    private Class<?> clazz = String.class;
     /** XSD datatype for the value */
-    private XSDDatatype type;
+    private XSDDatatype type = XSDDatatype.XSDstring;
 
     public LiteralValue() {
     }
@@ -82,7 +82,7 @@ public class LiteralValue<T> implements Serializable {
         return type;
     }
 
-    private void setType(XSDDatatype type) {
+    public void setType(XSDDatatype type) {
         this.type = type;
     }
 
@@ -142,29 +142,43 @@ public class LiteralValue<T> implements Serializable {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (LiteralValue.class != obj.getClass()) {
             return false;
         }
         final LiteralValue<T> other = (LiteralValue<T>) obj;
-        return this.getHash() == other.getHash();
+        boolean isEq = getHash() == other.getHash();
+        return isEq;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 71 * hash + (this.value != null ? this.value.toString().trim().hashCode() : 0);
-        hash = 71 * hash + (this.type != null ? this.type.getURI().hashCode() : 0);
-        return hash;
+        return (int) getHash();
     }
 
     public Literal inModel(OntModel model) {
         return model.createTypedLiteral(getValue(), getType());
     }
 
-    public long getHash() {
-        return (value != null ? value.toString().trim().hashCode() : 0)
-                + 7 * (type != null ? type.toString().trim().hashCode() : 0);
+    public int getHash() {
+        if (value!=null && type!=null){
+            return value.hashCode();
+        }
+        return super.hashCode();
     }
 
-    public void setHash(long hashCode) {/* Do nothing! */ }
+    public void setHash(int hashCode) {/* Do nothing! */ }
+
+    public static void main(String... ars) {
+        LiteralValue lv = new LiteralValue();
+
+        lv.setValue("abcdefghijklmnopqrstuvwxyz");
+        LiteralValue lv2 = new LiteralValue();
+        lv2.setValue("abcdefghijklmnopqrstuvwxyz");
+        System.out.println(lv + ", " + lv2.equals(lv));
+        System.out.println(lv.equals(lv2));
+        System.out.println(lv.getType());
+        System.out.println(lv.getValue());
+        System.out.println(lv.getHash());
+        System.out.println(lv.hashCode());
+    }
 }

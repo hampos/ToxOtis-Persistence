@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -46,6 +47,7 @@ public class Persist {
                 hbe.printStackTrace();
             } catch (SQLException sqle) {
                 System.err.println("Info: Alter failed (Probably not an error!)");
+                //Logger.getLogger(Persist.class).debug("Alter failed (Probably not an error!)", sqle);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -78,7 +80,6 @@ public class Persist {
         System.out.println("Storing Model");
         RegisterTool.storeModel(model, session);
 
-
         List resultsFoundInDB = session.createCriteria(Algorithm.class).list();
         System.out.println("found " + resultsFoundInDB.size());
         for (Object o : resultsFoundInDB) {
@@ -87,8 +88,6 @@ public class Persist {
                 System.out.println(pp.getMeta().getComments());
             }
         }
-
-
         session.close();
 
     }
