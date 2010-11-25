@@ -14,6 +14,7 @@ import org.opentox.toxotis.core.component.Algorithm;
 import org.opentox.toxotis.core.component.Dataset;
 import org.opentox.toxotis.core.component.Model;
 import org.opentox.toxotis.core.component.Parameter;
+import org.opentox.toxotis.core.component.Task;
 import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.persistence.db.RegisterTool;
 import org.opentox.toxotis.persistence.util.HibernateUtil;
@@ -67,19 +68,31 @@ public class Persist {
         System.out.println("Storing Algorithm");
         RegisterTool.storeAlgorithm(algorithm, session);
         System.out.println("Algorithm registered successfully!");
+        System.out.println();
 
         System.out.println("Loading Dataset");
-        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "6").addUrlParameter("max", 100)).loadFromRemote();
+        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "6").addUrlParameter("max", 20)).loadFromRemote();
         System.out.println("Dataset Loaded");
         System.out.println("Storing Dataset");
         RegisterTool.storeDataset(d, session);
         System.out.println("Dataset registered successfully!");
+        System.out.println();
 
         System.out.println("Loading Model");
         Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote();
         System.out.println("Model Loaded");
         System.out.println("Storing Model");
         RegisterTool.storeModel(model, session);
+        System.out.println("Model registered successfully!");
+        System.out.println();
+
+        System.out.println("Loading Task");
+        Task task = new Task(Services.ntua().augment("task", "68d471ad-0287-4f6e-a200-244d0234e8a1")).loadFromRemote();
+        System.out.println("Task Loaded");
+        System.out.println("Storing Task");
+        RegisterTool.storeTask(session, task);
+        System.out.println("Task registered successfully!");
+        System.out.println();
 
         List resultsFoundInDB = session.createCriteria(Algorithm.class).list();
         System.out.println("found " + resultsFoundInDB.size());

@@ -92,11 +92,27 @@ public class RegisterTool {
             session.flush();
             session.evict(p);
         }
+        session.saveOrUpdate(ds);
         session.getTransaction().commit();
         session.clear();
+    }
 
+
+    public static void storeTask(Session session, Task task){
         session.beginTransaction();
-        session.saveOrUpdate(ds);
+        User createdBy = task.getCreatedBy();
+        if (createdBy!=null){
+            session.saveOrUpdate(createdBy);
+//          
+
+        }
+        ErrorReport er = task.getErrorReport();
+        if (er!=null){
+            session.saveOrUpdate(er);
+            session.flush();
+            session.evict(er);
+
+        }
         session.getTransaction().commit();
         session.clear();
     }

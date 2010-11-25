@@ -12,7 +12,7 @@
         optimistic-lock="version"
         mutable="true">
 
-        <id name="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>        
+        <id name="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
 
         <!--    Foreign (M2O) key pointing to MetaInformation
                 Question: is unique="true" correct here???
@@ -87,14 +87,7 @@
                 on-delete="cascade"
                 foreign-key="uri_in_feature"/>
             <property name="units" type="string" length="50"/>
-
-
-            <!--
-            WARNING: BUG!!!!
-            If the following is activated weird things happen, regarding the
-            registration of datasets...
-            Have to create an issue and tackle it...
-            -->
+            
             <set name="ontologies" table="FeatOntol" cascade="delete">
                 <key column="featureUri"/>
                 <many-to-many class="org.opentox.toxotis.ontology.OntologicalClass" foreign-key="featureOntology">
@@ -231,8 +224,8 @@
                  foreign-key="uri_in_dataset"
                  on-delete="cascade"/>
             <list
-                name="dataEntries" cascade="all, delete">
-                <key column="datasetUri"/>
+                name="dataEntries" cascade="all, delete-orphan">
+                <key column="datasetUri" />
                 <index column="dataEntryDs_IDX"/>
                 <one-to-many class="org.opentox.toxotis.core.component.DataEntry"/>
             </list>
@@ -265,7 +258,7 @@
                     column="featureUri"
                     foreign-key="featureUri_ref_for_model"/>
             </set>
-            <many-to-one name="createdBy" class="org.opentox.toxotis.util.aa.User"/> 
+            <many-to-one name="createdBy" class="org.opentox.toxotis.util.aa.User"/>
             <many-to-one name="dependentFeature" class="org.opentox.toxotis.core.component.Feature" cascade="delete"/>
             <many-to-one name="predictedFeature" class="org.opentox.toxotis.core.component.Feature" cascade="delete"/>
             <many-to-one name="algorithm" class="org.opentox.toxotis.core.component.Algorithm" cascade="delete"/>

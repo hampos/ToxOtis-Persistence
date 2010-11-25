@@ -27,13 +27,17 @@ public class DataEntry extends OTComponent<DataEntry> {
 
     private Compound conformer;
     private List<FeatureValue> featureValues;
-    private final UUID uuid = UUID.randomUUID();
     private static final String DISCRIMINATOR = "dataEntry";
 
     @Override
     public VRI getUri() {
         if (uri == null) {
-            uri = Services.anonymous().augment(DISCRIMINATOR, uuid.toString());
+            int hash = 91;
+            for (FeatureValue fv : featureValues) {
+                hash += 3 * fv.getUri().hashCode();
+            }
+            uri = Services.anonymous().augment(DISCRIMINATOR,
+                    hash, conformer.getUri().toString().hashCode());
         }
         return uri;
     }
@@ -138,5 +142,4 @@ public class DataEntry extends OTComponent<DataEntry> {
         hash = 97 * hash + (this.featureValues != null ? this.featureValues.hashCode() : 0);
         return hash;
     }
-    
 }
