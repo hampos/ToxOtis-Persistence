@@ -81,8 +81,24 @@ public abstract class AbstractClient implements Closeable {
         return this;
     }
 
+    /**
+     * Provide an authentication token to the client. This token is given to the
+     * remote server to verify the client's identity. The remote service in turn
+     * asks the openSSO service whether the underlying request is allowed for the
+     * client with the given token. Services have also access to the client's data
+     * such as username, name and email which might be stored on the server side
+     * to provide accounting facilities.
+     *
+     * @param token
+     *      Authentication token which will be provided in the request's header.
+     *      Authentication/Authorization follow RFC's guidelines according to which
+     *      the token is provided using the Header {@link RequestHeaders#AUTHORIZATION
+     *      Authorization}.
+     * @return
+     *      This object with an updated header.
+     */
     public AbstractClient authorize(AuthenticationToken token) {
-        return addHeaderParameter(RequestHeaders.AUTHORIZATION, token.getTokenUrlEncoded());
+        return token != null ? addHeaderParameter(RequestHeaders.AUTHORIZATION, token.getTokenUrlEncoded()) : this;
     }
 
     /**

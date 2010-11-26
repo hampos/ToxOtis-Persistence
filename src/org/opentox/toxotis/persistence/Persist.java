@@ -1,23 +1,24 @@
 package org.opentox.toxotis.persistence;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashSet;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.opentox.toxotis.client.collection.Services;
 import org.opentox.toxotis.core.component.Algorithm;
 import org.opentox.toxotis.core.component.Dataset;
 import org.opentox.toxotis.core.component.Model;
 import org.opentox.toxotis.core.component.Parameter;
 import org.opentox.toxotis.core.component.Task;
-import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.persistence.db.RegisterTool;
 import org.opentox.toxotis.persistence.util.HibernateUtil;
+import org.opentox.toxotis.util.aa.AuthenticationToken;
 
 /**
  *
@@ -29,6 +30,7 @@ public class Persist {
     public static void main(String[] args) throws Exception {
         org.apache.log4j.LogManager.resetConfiguration();
         org.apache.log4j.PropertyConfigurator.configure("src/org/opentox/toxotis/persistence/config/log4j.properties");
+
         SessionFactory sf = HibernateUtil.getSessionFactory();
         Session session = sf.openSession();
 
@@ -49,7 +51,7 @@ public class Persist {
                 hbe.printStackTrace();
             } catch (SQLException sqle) {
                 System.err.println("Info: Alter failed (Probably not an error!)");
-                //Logger.getLogger(Persist.class).debug("Alter failed (Probably not an error!)", sqle);
+                Logger.getLogger(Persist.class).debug("Alter failed (Probably not an error!)", sqle);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -59,32 +61,35 @@ public class Persist {
          * OPEN SESSION
          */
         session = sf.openSession();
-        RegisterTool.storeAllOntClasses(session);
-
-
-        System.out.println("Loading Algorithm");
-        Algorithm algorithm = new Algorithm(Services.ntua().augment("algorithm", "svm")).loadFromRemote();
-        System.out.println("Algorithm Loaded");
-        System.out.println("Storing Algorithm");
-        RegisterTool.storeAlgorithm(algorithm, session);
-        System.out.println("Algorithm registered successfully!");
-        System.out.println();
-
-        System.out.println("Loading Dataset");
-        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "6").addUrlParameter("max", 0)).loadFromRemote();
-        System.out.println("Dataset Loaded");
-        System.out.println("Storing Dataset");
-        RegisterTool.storeDataset(d, session);
-        System.out.println("Dataset registered successfully!");
-        System.out.println();
+//
+//        System.out.println("Storing Ontological Classes");
+//        RegisterTool.storeAllOntClasses(session);
+//        System.out.println("Ontological Classes stored successfully!\n");
+//
+//
+//        System.out.println("Loading Algorithm");
+        AuthenticationToken at = new AuthenticationToken(new File("/home/chung/toxotisKeys/my.key"));
+        System.out.println("Authentication Token : \n" + at);
+//        System.out.println("User:\n" + at.getUser());
+//        Algorithm algorithm = new Algorithm(Services.ntua().augment("algorithm", "svm")).loadFromRemote(at);
+//        System.out.println("Algorithm Loaded");
+//        System.out.println("Storing Algorithm");
+//        RegisterTool.storeAlgorithm(algorithm, session);
+//        System.out.println("Algorithm registered successfully!\n");
+//
+//        System.out.println("Loading Dataset");
+//        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "9")).loadFromRemote();
+//        System.out.println("Dataset Loaded");
+//        System.out.println("Storing Dataset");
+//        RegisterTool.storeDataset(d, session);
+//        System.out.println("Dataset registered successfully!\n");
 
         System.out.println("Loading Model");
-        Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote();
+        Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote(at);
         System.out.println("Model Loaded");
         System.out.println("Storing Model");
         RegisterTool.storeModel(model, session);
-        System.out.println("Model registered successfully!");
-        System.out.println();
+        System.out.println("Model registered successfully!\n");
 
         System.out.println("Loading Tasks");
         Task task_complete = new Task(Services.ntua().augment("task", "68d471ad-0287-4f6e-a200-244d0234e8a1")).loadFromRemote();
@@ -98,7 +103,12 @@ public class Persist {
         System.out.println("Task #2 registered successfully!");
         System.out.println();
 
-        List resultsFoundInDB = session.createCriteria(Algorithm.class).list();
+        /*
+         * For more info about criteria read:
+         * http://docs.jboss.org/hibernate/core/3.3/reference/en/html/querycriteria.html
+         */
+        List resultsFoundInDB = session.createCriteria(Algorithm.class).
+                add(Restrictions.like("uri", "%svm")).list();
         System.out.println("found " + resultsFoundInDB.size());
         for (Object o : resultsFoundInDB) {
             Algorithm alg = (Algorithm) o;
@@ -126,4 +136,3 @@ public class Persist {
 //        Η ομορφιά του θέλω,
 //        Μάρω Μαρκέλου
 //
-

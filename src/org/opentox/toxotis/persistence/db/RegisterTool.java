@@ -1,10 +1,9 @@
 package org.opentox.toxotis.persistence.db;
 
-import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.Session;
+import org.opentox.toxotis.core.OTComponent;
 import org.opentox.toxotis.core.component.*;
-import org.opentox.toxotis.ontology.LiteralValue;
 import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.ontology.collection.OTAlgorithmTypes;
 import org.opentox.toxotis.ontology.collection.OTClasses;
@@ -18,6 +17,10 @@ import org.opentox.toxotis.util.aa.User;
  */
 public class RegisterTool {
 
+    private static void preprocessComponent(OTComponent component) {
+        component.getUri().clearToken();
+    }
+
     public static void storeUser(User user, Session session) {
         session.beginTransaction();
         session.saveOrUpdate(user);
@@ -25,24 +28,27 @@ public class RegisterTool {
         session.clear();
     }
 
-    public static void storeAlgorithm(Algorithm a, Session session) {
+    public static void storeAlgorithm(Algorithm algorithm, Session session) {
         session.beginTransaction();
-        for (Parameter p : a.getParameters()) {
+        preprocessComponent(algorithm);
+        for (Parameter p : algorithm.getParameters()) {
             session.saveOrUpdate(p);
             session.flush();
             session.evict(p);
         }
-        session.saveOrUpdate(a);
+        session.saveOrUpdate(algorithm);
         session.flush();
-        session.evict(a);
+        session.evict(algorithm);
         session.getTransaction().commit();
         session.clear();
     }
 
     public static void storeModel(Model model, Session session) {
+        preprocessComponent(model);
         session.beginTransaction();
-
-        session.saveOrUpdate(model.getAlgorithm());
+        if (model.getAlgorithm() != null) {
+            session.saveOrUpdate(model.getAlgorithm());
+        }
         session.flush();
         session.evict(model.getAlgorithm());
 
@@ -51,13 +57,14 @@ public class RegisterTool {
             session.flush();
             session.evict(p);
         }
-        
+
         for (Feature ft : model.getIndependentFeatures()) {
             session.saveOrUpdate(ft);
             session.flush();
             session.evict(ft);
         }
         if (model.getCreatedBy() != null) {
+            System.out.println("Created By FOUND");
             session.saveOrUpdate(model.getCreatedBy());
             session.flush();
             session.evict(model.getCreatedBy());
@@ -75,9 +82,10 @@ public class RegisterTool {
         session.clear();
     }
 
-    public static void storeDataset(Dataset ds, Session session) {
+    public static void storeDataset(Dataset dataset, Session session) {
+        preprocessComponent(dataset);
         session.beginTransaction();
-        for (Feature f : ds.getContainedFeatures()) {
+        for (Feature f : dataset.getContainedFeatures()) {
             session.saveOrUpdate(f);
             session.flush();
             session.evict(f);
@@ -86,26 +94,26 @@ public class RegisterTool {
         session.clear();
 
         session.beginTransaction();
-        Set<FeatureValue> ff = ds.getFeatureValues();
+        Set<FeatureValue> ff = dataset.getFeatureValues();
         for (FeatureValue p : ff) {
             session.saveOrUpdate(p);
             session.flush();
             session.evict(p);
         }
-        session.saveOrUpdate(ds);
+        session.saveOrUpdate(dataset);
         session.getTransaction().commit();
         session.clear();
     }
 
-
-    public static void storeTask(Session session, Task task){
+    public static void storeTask(Session session, Task task) {
+        preprocessComponent(task);
         session.beginTransaction();
         User createdBy = task.getCreatedBy();
-        if (createdBy!=null){
+        if (createdBy != null) {
             session.saveOrUpdate(createdBy);
         }
         ErrorReport er = task.getErrorReport();
-        if (er!=null){
+        if (er != null) {
             session.saveOrUpdate(er);
             session.flush();
             session.evict(er);
@@ -149,8 +157,10 @@ public class RegisterTool {
         session.clear();
     }
 
-    public static void storeBibTeX(Session session) {
+    public static void storeBibTeX(Session session, BibTeX bibtex) {
+        preprocessComponent(bibtex);
         session.beginTransaction();
+        session.saveOrUpdate(bibtex);
         session.getTransaction().commit();
         session.clear();
     }

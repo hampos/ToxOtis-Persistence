@@ -237,7 +237,7 @@ public class Compound extends DescriptorCaclulation<Compound> {
      *      transaction of data.
      */
     @Override
-    protected Compound loadFromRemote(VRI uri) throws ToxOtisException {
+    protected Compound loadFromRemote(VRI uri, AuthenticationToken token) throws ToxOtisException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

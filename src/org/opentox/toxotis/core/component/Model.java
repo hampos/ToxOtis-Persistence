@@ -161,8 +161,8 @@ public class Model extends OTOnlineResource<Model> implements OntologyServiceSup
         return indiv;
     }
 
-    protected Model loadFromRemote(VRI uri) throws ToxOtisException {
-        ModelSpider spider = new ModelSpider(uri);
+    protected Model loadFromRemote(VRI uri, AuthenticationToken token) throws ToxOtisException {
+        ModelSpider spider = new ModelSpider(uri, token);
         Model m = spider.parse();
         setAlgorithm(m.getAlgorithm());
         setDataset(m.getDataset());
@@ -171,6 +171,7 @@ public class Model extends OTOnlineResource<Model> implements OntologyServiceSup
         setMeta(m.getMeta());
         setParameters(m.getParameters());
         setPredictedFeature(m.getPredictedFeature());
+        setCreatedBy(m.getCreatedBy());
         return this;
     }
 

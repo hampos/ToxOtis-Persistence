@@ -287,9 +287,11 @@ public class VRI implements Serializable { // Well tested!
     }
 
     /**
-     * Clears any tokens that might be contained in the URI
+     * Clears any tokens that might be contained in the URI. Though tokens are not
+     * provided any more within the set of URL parameters,
+     *
      * @return
-     *      Updated URI without tokens.
+     *      Updated URI without tokens.    
      */
     public VRI clearToken() {
         return removeUrlParameter(TOKENID);
@@ -298,7 +300,8 @@ public class VRI implements Serializable { // Well tested!
     /**
      * Add a URL parameter. As soon as you provide the URL parameter and its value,
      * these are encoded using the UTF-8 encoding so you do not need to encode them
-     * before submitting them.
+     * before submitting them. 
+     *
      * @param paramName
      *      The name of the parameter
      * @param paramValue
@@ -308,7 +311,8 @@ public class VRI implements Serializable { // Well tested!
      */
     public VRI addUrlParameter(String paramName, String paramValue) {
         try {
-            urlParams.add(new Pair<String, String>(URLEncoder.encode(paramName, URL_ENCODING), URLEncoder.encode(paramValue, URL_ENCODING)));
+            urlParams.add(new Pair<String, String>(URLEncoder.encode(paramName, URL_ENCODING),
+                    URLEncoder.encode(paramValue, URL_ENCODING)));
         } catch (UnsupportedEncodingException ex) {
             throw new RuntimeException(ex);
         }
@@ -319,6 +323,7 @@ public class VRI implements Serializable { // Well tested!
      * Add a double valued URL parameter. As soon as you provide the URL parameter and its value,
      * these are encoded using the UTF-8 encoding so you do not need to encode them
      * before submitting them.
+     *
      * @param paramName
      *      The name of the parameter
      * @param paramValue
@@ -328,7 +333,8 @@ public class VRI implements Serializable { // Well tested!
      */
     public VRI addUrlParameter(String paramName, double paramValue) {
         try {
-            urlParams.add(new Pair<String, String>(URLEncoder.encode(paramName, URL_ENCODING), URLEncoder.encode(new Double(paramValue).toString(), URL_ENCODING)));
+            urlParams.add(new Pair<String, String>(URLEncoder.encode(paramName, URL_ENCODING),
+                    URLEncoder.encode(new Double(paramValue).toString(), URL_ENCODING)));
         } catch (UnsupportedEncodingException ex) {
             throw new RuntimeException(ex);
         }
@@ -339,6 +345,7 @@ public class VRI implements Serializable { // Well tested!
      * Add an integer valued URL parameter. As soon as you provide the URL parameter and its value,
      * these are encoded using the UTF-8 encoding so you do not need to (and must not) encode them
      * before submitting them.
+     *
      * @param paramName
      *      The name of the parameter
      * @param paramValue
@@ -362,7 +369,13 @@ public class VRI implements Serializable { // Well tested!
      *      Authentication Token
      * @return
      *      The updated VRI with the token.
+     * @deprecated
+     *      This method is deprectated due to migration from OpenTox API 1.1.
+     *      to version 1.2. Authentication is materialized using the HTTP Header
+     *      <code>Authorization</code> instead of the URL parameter
+     *      <code>toked_id</code>.
      */
+    @Deprecated
     public VRI appendToken(AuthenticationToken token) {
         if (token != null) {
             return addUrlParameter(TOKENID, token.stringValue());

@@ -172,7 +172,7 @@ public class Feature extends OTPublishable<Feature> {
         return new String(builder);
     }
 
-    protected Feature loadFromRemote(VRI uri) throws ToxOtisException {
+    protected Feature loadFromRemote(VRI uri, AuthenticationToken token) throws ToxOtisException {
         FeatureSpider fSpider = new FeatureSpider(uri);
         Feature f = fSpider.parse();
         setMeta(f.getMeta());

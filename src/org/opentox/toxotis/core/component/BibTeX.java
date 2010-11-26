@@ -77,7 +77,7 @@ public class BibTeX extends OTPublishable<BibTeX> {
     }
 
     @Override
-    protected BibTeX loadFromRemote(VRI uri) throws ToxOtisException {
+    protected BibTeX loadFromRemote(VRI uri, AuthenticationToken token) throws ToxOtisException {        
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

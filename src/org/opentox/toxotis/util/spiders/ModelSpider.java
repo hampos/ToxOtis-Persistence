@@ -22,6 +22,8 @@ import org.opentox.toxotis.core.component.Feature;
 import org.opentox.toxotis.core.component.Model;
 import org.opentox.toxotis.core.component.Parameter;
 import org.opentox.toxotis.ontology.collection.OTObjectProperties;
+import org.opentox.toxotis.util.aa.AuthenticationToken;
+import org.opentox.toxotis.util.aa.User;
 
 /**
  *
@@ -30,17 +32,25 @@ import org.opentox.toxotis.ontology.collection.OTObjectProperties;
  */
 public class ModelSpider extends Tarantula<Model> {
 
-    VRI uri;
+    private VRI uri;
+    private AuthenticationToken token;
 
     public ModelSpider(VRI uri) throws ToxOtisException {
+        this(uri, (AuthenticationToken) null);
+    }
+
+    public ModelSpider(VRI uri, AuthenticationToken token) throws ToxOtisException {
         super();
         this.uri = uri;
+        this.token = token;
         GetClient client = new GetClient();
+        client.authorize(token);
         try {
             client.setMediaType(Media.APPLICATION_RDF_XML);
             client.setUri(uri);
             int status = client.getResponseCode();
             assessHttpStatus(status, uri);
+            uri.clearToken(); // << Token no needed any more!
             model = client.getResponseOntModel();
             resource = model.getResource(uri.toString());
         } catch (final IOException ex) {
@@ -84,6 +94,15 @@ public class ModelSpider extends Tarantula<Model> {
 
         m.setUri(uri);
         m.setMeta(new MetaInfoSpider(resource, model).parse());
+
+        if (token != null) {
+            try {
+                User u = token.getUser();
+                m.setCreatedBy(u);
+            } catch (ToxOtisException ex) {
+                Logger.getLogger(FeatureSpider.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
         StmtIterator itDataset = model.listStatements(
                 new SimpleSelector(resource,
@@ -136,13 +155,8 @@ public class ModelSpider extends Tarantula<Model> {
                 (RDFNode) null));
         if (itAlgorithm.hasNext()) {
             AlgorithmSpider aspider;
-//            try {
             aspider = new AlgorithmSpider(itAlgorithm.nextStatement().getObject().as(Resource.class), model);
             m.setAlgorithm(aspider.parse());
-//            } catch (URISyntaxException ex) {
-//                Logger.getLogger(ModelSpider.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-
         }
 
         StmtIterator itParam = model.listStatements(
@@ -156,8 +170,6 @@ public class ModelSpider extends Tarantula<Model> {
             parameters.add(paramSpider.parse());
         }
         m.setParameters(parameters);
-
-
         return m;
     }
 }

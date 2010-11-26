@@ -11,6 +11,7 @@ import org.opentox.toxotis.core.OTOnlineResource;
 import org.opentox.toxotis.ontology.collection.OTClasses;
 import org.opentox.toxotis.ontology.collection.OTDatatypeProperties;
 import org.opentox.toxotis.ontology.collection.OTObjectProperties;
+import org.opentox.toxotis.util.aa.AuthenticationToken;
 import org.opentox.toxotis.util.aa.User;
 import org.opentox.toxotis.util.spiders.TaskSpider;
 
@@ -21,8 +22,8 @@ import org.opentox.toxotis.util.spiders.TaskSpider;
  */
 public class Task extends OTOnlineResource<Task> {
 
-    protected Task loadFromRemote(VRI uri) throws ToxOtisException {
-        TaskSpider tSpider = new TaskSpider(uri);
+    protected Task loadFromRemote(VRI uri, AuthenticationToken token) throws ToxOtisException {
+        TaskSpider tSpider = new TaskSpider(uri,token);
         Task downloadedTask = tSpider.parse();
         setMeta(downloadedTask.getMeta());
         setErrorReport(downloadedTask.getErrorReport());

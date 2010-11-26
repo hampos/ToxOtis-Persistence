@@ -48,7 +48,6 @@ public class Algorithm extends OTOnlineResource<Algorithm> implements OntologySe
     public Algorithm() {
     }
 
-    
     /**
      * Create a new instance of Algorithm providing its identifier as a {@link VRI }.
      * @param uri
@@ -178,11 +177,12 @@ public class Algorithm extends OTOnlineResource<Algorithm> implements OntologySe
         com.hp.hpl.jena.ontology.OntModel om = new SimpleOntModelImpl();
         om.read(stream, null);
         AlgorithmSpider spider = new AlgorithmSpider(null, om);
-        throw new UnsupportedOperationException();
+        Algorithm alg = spider.parse();
+        return alg;
     }
 
     @Override
-    protected Algorithm loadFromRemote(VRI uri) throws ToxOtisException {
+    protected Algorithm loadFromRemote(VRI uri, AuthenticationToken token) throws ToxOtisException {
         AlgorithmSpider spider = new AlgorithmSpider(uri);
         Algorithm algorithm = spider.parse();
         setMeta(algorithm.getMeta());
@@ -192,7 +192,6 @@ public class Algorithm extends OTOnlineResource<Algorithm> implements OntologySe
     }
 
     public Algorithm publishToOntService(VRI ontologyService, AuthenticationToken token) throws ToxOtisException {
-
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

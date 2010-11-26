@@ -272,6 +272,8 @@ public class Dataset extends OTPublishable<Dataset> {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    
+
     private enum WekaDataTypes {
 
         string,
@@ -317,8 +319,9 @@ public class Dataset extends OTPublishable<Dataset> {
         return indiv;
     }
 
-    protected Dataset loadFromRemote(VRI uri) throws ToxOtisException {
-        DatasetSpider spider = new DatasetSpider(uri);
+    @Override
+    protected Dataset loadFromRemote(VRI uri, AuthenticationToken token) throws ToxOtisException {
+        DatasetSpider spider = new DatasetSpider(uri, token);
         Dataset ds = spider.parse();
         setDataEntries(ds.getDataEntries());
         setUri(ds.getUri());
