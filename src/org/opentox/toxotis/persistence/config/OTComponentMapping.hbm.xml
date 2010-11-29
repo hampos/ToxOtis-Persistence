@@ -157,6 +157,7 @@
                 class="org.opentox.toxotis.core.component.ErrorReport"
                 cascade="all"
                 foreign-key="errReport_in_task"/>
+                <many-to-one name="createdBy" class="org.opentox.toxotis.util.aa.User"/>
         </joined-subclass>
 
         <!--
