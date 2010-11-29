@@ -44,7 +44,7 @@ In order to persist ToxOtis objects using Hibernate you have to have installed o
     <!-- Database connection settings -->
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     <!-- Using MySQL  -->
-    <property name="connection.url">jdbc:mysql://localhost/toxotis</property>
+    <property name="connection.url"><b>jdbc:mysql://localhost/toxotis</b></property>
     <!-- Database user  -->
     <property name="connection.username">root</property>
     <!-- Your password goes here... -->
