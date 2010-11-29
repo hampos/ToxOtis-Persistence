@@ -35,6 +35,7 @@ h2. Installation Notes
 
 In order to persist ToxOtis objects using Hibernate you have to have installed on your machine a relational "datbase server supported by Hibernate":http://community.jboss.org/wiki/SupportedDatabases. Among other "MySQL":http://www.mysql.com/, "PostgreSQL":http://www.postgresql.org/, "Apache Derby":http://db.apache.org/derby/ and lots of "other":http://community.jboss.org/wiki/SupportedDatabases/ (This module is tested with MySQL but is believed to work with other DBs as well). Copy the file example.cfg.xml into hibernate.cfg.xml in the same folder (src/org/opentox/toxotis/persistence/config) and set the jdbc URL and password accordingly. 
 
+<pre>
 <code>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
@@ -43,7 +44,7 @@ In order to persist ToxOtis objects using Hibernate you have to have installed o
     <!-- Database connection settings -->
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     <!-- Using MySQL  -->
-    <property name="connection.url"><b>jdbc:mysql://localhost/toxotis</b></property>
+    <property name="connection.url">jdbc:mysql://localhost/toxotis</property>
     <!-- Database user  -->
     <property name="connection.username">root</property>
     <!-- Your password goes here... -->
@@ -70,7 +71,7 @@ In order to persist ToxOtis objects using Hibernate you have to have installed o
 </hibernate-configuration>
 
 </code>
-
+</pre>
 
 h2. License
 
