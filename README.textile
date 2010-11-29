@@ -1,0 +1,79 @@
+h1. Τοξότης: Persistence Module
+
+h2. About
+
+<b>Version:</b>
+ + 0.1.0.0, alpha version
+
+<b>Authors:</b>
+ + "Sopasakis Pantelis":http://gr.linkedin.com/in/sopasakis
+ + "Charalampos Chomenidis":http://gr.linkedin.com/pub/hampos-chomenidis/14/29a/778
+
+<b>Description:</b>
+ + ToxOtis is the Greek word for Sagittarius, that actually means 'archer'. ToxOtis is a Java interface to the predictive toxicology services of "OpenTox":http://opentox.org. ToxOtis is being developed to help both those who need a painless way to consume "OpenTox":http://opentox.org services and for ambitious service providers that don't want to spend half of their time in RDF parsing and creation. ToxOtis-Persistence is a persistence module for ToxOtis. Loading the jar file in your classpath along with ToxOtis.jar will provide persistence functionalities.
+
+
+h2. Dependencies
+
+This project depends on the following libraries (Should be downloaded and added in your classpath).
+
+* The latest version of "ToxOtis":https://github.com/alphaville/ToxOtis.
+
+* "Jena, version 2.6.2":http://sourceforge.net/projects/jena/files/Jena/Jena-2.6.2/jena-2.6.2.zip/download : Download Jena from "this link":http://sourceforge.net/projects/jena/files/Jena/Jena-2.6.2/jena-2.6.2.zip/download. [Make sure to download version 2.6.2. otherwise there is no guarantee it will work as expected.]
+
+* "Weka, version 3.6.2":http://sourceforge.net/projects/weka/files/weka-3-6/3.6.2/weka-3-6-2.zip/download : Download weka and add weka.jar in your classpath.
+
+* "JFreeChart 1.0.13":http://sourceforge.net/projects/jfreechart/files/1.%20JFreeChart/1.0.13/jfreechart-1.0.13.tar.gz/download : Download JFreeChart and enjoy free charts.
+
+* "Hibernate":http://sourceforge.net/projects/hibernate/files/hibernate3/ version 3.6.0.  
+
+* "MySQL Connector":http://www.mysql.com/downloads/connector/j/ or other connector with the database server you will choose (This is configurable). 
+
+
+
+h2. Installation Notes
+
+In order to persist ToxOtis objects using Hibernate you have to have installed on your machine a relational "datbase server supported by Hibernate":http://community.jboss.org/wiki/SupportedDatabases. Among other "MySQL":http://www.mysql.com/, "PostgreSQL":http://www.postgresql.org/, "Apache Derby":http://db.apache.org/derby/ and lots of "other":http://community.jboss.org/wiki/SupportedDatabases/ (This module is tested with MySQL but is believed to work with other DBs as well). Copy the file example.cfg.xml into hibernate.cfg.xml in the same folder (src/org/opentox/toxotis/persistence/config) and set the jdbc URL and password accordingly. 
+
+<pre>
+<code>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <!-- Database connection settings -->
+    <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+    <!-- Using MySQL  -->
+    <property name="connection.url">jdbc:mysql://localhost/toxotis</property>
+    <!-- Database user  -->
+    <property name="connection.username">root</property>
+    <!-- Your password goes here... -->
+    <property name="connection.password">opensess@me</property>
+    <!-- JDBC connection pool (use the built-in) -->
+    <property name="connection.pool_size">1</property>
+    <!-- SQL dialect -->
+    <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+    <!-- Enable Hibernate's automatic session context management -->
+    <property name="current_session_context_class">thread</property>
+    <!-- Disable the second-level cache  -->
+    <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+    <!-- Echo all executed SQL to stdout -->
+    <property name="show_sql">false</property>
+    <!-- Drop and re-create the database schema on startup -->
+    <property name="hbm2ddl.auto">update</property>
+    <mapping resource="./org/opentox/toxotis/persistence/config/LiteralValueMapping.hbm.xml"/>
+    <mapping resource="./org/opentox/toxotis/persistence/config/ResourceValue.hbm.xml"/>
+    <mapping resource="./org/opentox/toxotis/persistence/config/MetaInfoMapping.hbm.xml"/>
+    <mapping resource="./org/opentox/toxotis/persistence/config/OTComponentMapping.hbm.xml"/>
+    <mapping resource="./org/opentox/toxotis/persistence/config/OntologicalClassMapping.hbm.xml"/>
+    <mapping resource="./org/opentox/toxotis/persistence/config/UserMapping.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>
+
+</code>
+</pre>
+
+
+h2. License
+
+This project, as well as all other projects developed by the NTUA developers team under OpeTox, is licensed under the "GNU GPL license version 3":http://www.gnu.org/licenses/gpl.html. There is a considerable debate taking place in the open source community regarding the use of the GPL or LGPL, while a variety of other licenses can be found on the web as well. However it is GNU itself that prompts developers to use GPL (read "this article":http://www.gnu.org/philosophy/why-not-lgpl.html).
