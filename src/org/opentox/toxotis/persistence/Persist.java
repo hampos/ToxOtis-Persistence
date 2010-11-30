@@ -61,24 +61,26 @@ public class Persist {
          * OPEN SESSION
          */
         session = sf.openSession();
-//
-//        System.out.println("Storing Ontological Classes");
-//        RegisterTool.storeAllOntClasses(session);
-//        System.out.println("Ontological Classes stored successfully!\n");
-//
-//
-//        System.out.println("Loading Algorithm");
+
+        System.out.println("Storing Ontological Classes");
+        RegisterTool.storeAllOntClasses(session);
+        System.out.println("Ontological Classes stored successfully!\n");
+
+        System.out.println("Acquiring Token...");
         AuthenticationToken at = new AuthenticationToken(new File("/home/chung/toxotisKeys/my.key"));
+        System.out.println("Done!");
         System.out.println("Authentication Token : \n" + at);
-//        System.out.println("User:\n" + at.getUser());
-//        Algorithm algorithm = new Algorithm(Services.ntua().augment("algorithm", "svm")).loadFromRemote(at);
-//        System.out.println("Algorithm Loaded");
-//        System.out.println("Storing Algorithm");
-//        RegisterTool.storeAlgorithm(algorithm, session);
-//        System.out.println("Algorithm registered successfully!\n");
-//
+        System.out.println("User:\n" + at.getUser());
+
+        System.out.println("Loading Algorithm");
+        Algorithm algorithm = new Algorithm(Services.ntua().augment("algorithm", "svm")).loadFromRemote(at);
+        System.out.println("Algorithm Loaded");
+        System.out.println("Storing Algorithm");
+        RegisterTool.storeAlgorithm(algorithm, session);
+        System.out.println("Algorithm registered successfully!\n");
+
         System.out.println("Loading Dataset");
-        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "4").addUrlParameter("max", "20")).loadFromRemote();
+        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "6").addUrlParameter("max", "500")).loadFromRemote();
         System.out.println("Dataset Loaded");
         System.out.println("Storing Dataset");
         RegisterTool.storeDataset(d, session);
@@ -92,9 +94,9 @@ public class Persist {
         System.out.println("Model registered successfully!\n");
 
         System.out.println("Loading Tasks");
-        Task task_complete = new Task(Services.ntua().augment("task", "68d471ad-0287-4f6e-a200-244d0234e8a1")).loadFromRemote();
+        Task task_complete = new Task(Services.ntua().augment("task", "68d471ad-0287-4f6e-a200-244d0234e8a1")).loadFromRemote(at);
         System.out.println("Task #1 Loaded");
-        Task task_error = new Task(Services.ntua().augment("task", "0980cbb3-a4a8-4a89-8538-51992d2fc67f")).loadFromRemote();
+        Task task_error = new Task(Services.ntua().augment("task", "0980cbb3-a4a8-4a89-8538-51992d2fc67f")).loadFromRemote(at);
         System.out.println("Task #2 Loaded");
         System.out.println("Storing Tasks");
         RegisterTool.storeTask(session, task_complete);
@@ -136,3 +138,4 @@ public class Persist {
 //        Η ομορφιά του θέλω,
 //        Μάρω Μαρκέλου
 //
+
