@@ -4,6 +4,8 @@ import java.util.Set;
 import org.hibernate.Session;
 import org.opentox.toxotis.core.OTComponent;
 import org.opentox.toxotis.core.component.*;
+import org.opentox.toxotis.ontology.LiteralValue;
+import org.opentox.toxotis.ontology.MetaInfo;
 import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.ontology.collection.OTAlgorithmTypes;
 import org.opentox.toxotis.ontology.collection.OTClasses;
@@ -64,7 +66,6 @@ public class RegisterTool {
             session.evict(ft);
         }
         if (model.getCreatedBy() != null) {
-            System.out.println("Created By FOUND");
             session.saveOrUpdate(model.getCreatedBy());
             session.flush();
             session.evict(model.getCreatedBy());
@@ -159,7 +160,12 @@ public class RegisterTool {
 
     public static void storeBibTeX(Session session, BibTeX bibtex) {
         preprocessComponent(bibtex);
+
         session.beginTransaction();
+        User createdBy = bibtex.getCreatedBy();
+        if (createdBy != null) {
+            session.saveOrUpdate(createdBy);
+        }
         session.saveOrUpdate(bibtex);
         session.getTransaction().commit();
         session.clear();
