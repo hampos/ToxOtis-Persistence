@@ -156,7 +156,7 @@
       <many-to-one cascade="delete" class="org.opentox.toxotis.core.component.Algorithm" name="algorithm"/>
       <property name="localCode" type="string" unique="true"/>
       <property name="dataset" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
-      <property name="actualModel" type="serializable"/>
+      <property name="blob" column="modData" type="blob"/>
     </joined-subclass>
   </class>
 </hibernate-mapping>

@@ -67,11 +67,11 @@ public class Persist {
          */
         session = sf.openSession();
 
-        DeleteTool.deleteTask(session, Task.Status.RUNNING, Task.Status.QUEUED);
+//        DeleteTool.deleteTask(session, Task.Status.RUNNING, Task.Status.QUEUED);
 
-//        System.out.println("Storing Ontological Classes");
-//        RegisterTool.storeAllOntClasses(session);
-//        System.out.println("Ontological Classes stored successfully!\n");
+        System.out.println("Storing Ontological Classes");
+        RegisterTool.storeAllOntClasses(session);
+        System.out.println("Ontological Classes stored successfully!\n");
 //
 //        System.out.println("Acquiring Token...");
 //        AuthenticationToken at = new AuthenticationToken(new File("/home/chung/toxotisKeys/my.key"));
@@ -93,13 +93,13 @@ public class Persist {
 //        RegisterTool.storeDataset(d, session);
 //        System.out.println("Dataset registered successfully!\n");
 //
-//        System.out.println("Loading Model");
-//        Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote(at);
-//        model.setActualModel(new java.net.URI("http://in.gr/#asdf"));
-//        System.out.println("Model Loaded");
-//        System.out.println("Storing Model");
-//        RegisterTool.storeModel(model, session);
-//        System.out.println("Model registered successfully!\n");
+        System.out.println("Loading Model");
+        Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote();
+        model.setActualModel(new java.net.URI("http://in.gr/#asdf"));
+        System.out.println("Model Loaded");
+        System.out.println("Storing Model");
+        RegisterTool.storeModel(model, session);
+        System.out.println("Model registered successfully!\n");
 
         
 //

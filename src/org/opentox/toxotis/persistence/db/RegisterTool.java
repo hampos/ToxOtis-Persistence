@@ -1,6 +1,8 @@
 package org.opentox.toxotis.persistence.db;
 
 import java.util.Set;
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.opentox.toxotis.core.OTComponent;
 import org.opentox.toxotis.core.component.*;
@@ -46,41 +48,54 @@ public class RegisterTool {
     }
 
     public static void storeModel(Model model, Session session) {
-        preprocessComponent(model);
-        session.beginTransaction();
-        if (model.getAlgorithm() != null) {
-            session.saveOrUpdate(model.getAlgorithm());
-        }
-        session.flush();
-        session.evict(model.getAlgorithm());
-
-        for (Parameter p : model.getParameters()) {
-            session.saveOrUpdate(p);
+        try {
+            preprocessComponent(model);
+            session.beginTransaction();
+            if (model.getAlgorithm() != null) {
+                session.saveOrUpdate(model.getAlgorithm());
+            }
             session.flush();
-            session.evict(p);
-        }
+            session.evict(model.getAlgorithm());
 
-        for (Feature ft : model.getIndependentFeatures()) {
-            session.saveOrUpdate(ft);
-            session.flush();
-            session.evict(ft);
-        }
-        if (model.getCreatedBy() != null) {
-            session.saveOrUpdate(model.getCreatedBy());
-            session.flush();
-            session.evict(model.getCreatedBy());
-        }
-        session.saveOrUpdate(model.getDependentFeature());
-        session.flush();
-        session.evict(model.getDependentFeature());
+            if (model.getParameters() != null) {
+                for (Parameter p : model.getParameters()) {
+                    session.saveOrUpdate(p);
+                    session.flush();
+                    session.evict(p);
+                }
+            }
 
-        session.saveOrUpdate(model.getPredictedFeature());
-        session.flush();
-        session.evict(model.getPredictedFeature());
+            if (model.getIndependentFeatures() != null) {
+                for (Feature ft : model.getIndependentFeatures()) {
+                    session.saveOrUpdate(ft);
+                    session.flush();
+                    session.evict(ft);
+                }
+            }
+            if (model.getCreatedBy() != null) {
+                session.saveOrUpdate(model.getCreatedBy());
+                session.flush();
+                session.evict(model.getCreatedBy());
+            }
+            if (model.getDependentFeature() != null) {
+                session.saveOrUpdate(model.getDependentFeature());
+                session.flush();
+                session.evict(model.getDependentFeature());
+            }
 
-        session.saveOrUpdate(model);
-        session.getTransaction().commit();
-        session.clear();
+            if (model.getPredictedFeature() != null) {
+                session.saveOrUpdate(model.getPredictedFeature());
+                session.flush();
+                session.evict(model.getPredictedFeature());
+            }
+
+            session.saveOrUpdate(model);
+            session.getTransaction().commit();
+            session.clear();
+        } catch (HibernateException ex) {
+            Logger.getLogger(RegisterTool.class).warn("Cannot Store Model", ex);
+            throw ex;
+        }
     }
 
     public static void storeDataset(Dataset dataset, Session session) {
