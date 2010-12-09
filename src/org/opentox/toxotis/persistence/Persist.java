@@ -20,6 +20,7 @@ import org.opentox.toxotis.core.component.Dataset;
 import org.opentox.toxotis.core.component.Model;
 import org.opentox.toxotis.core.component.Parameter;
 import org.opentox.toxotis.core.component.Task;
+import org.opentox.toxotis.persistence.db.DeleteTool;
 import org.opentox.toxotis.persistence.db.RegisterTool;
 import org.opentox.toxotis.persistence.util.HibernateUtil;
 import org.opentox.toxotis.util.aa.AuthenticationToken;
@@ -66,12 +67,14 @@ public class Persist {
          */
         session = sf.openSession();
 
-        System.out.println("Storing Ontological Classes");
-        RegisterTool.storeAllOntClasses(session);
-        System.out.println("Ontological Classes stored successfully!\n");
+        DeleteTool.deleteTask(session, Task.Status.RUNNING, Task.Status.QUEUED);
+
+//        System.out.println("Storing Ontological Classes");
+//        RegisterTool.storeAllOntClasses(session);
+//        System.out.println("Ontological Classes stored successfully!\n");
 //
-        System.out.println("Acquiring Token...");
-        AuthenticationToken at = new AuthenticationToken(new File("/home/chung/toxotisKeys/my.key"));
+//        System.out.println("Acquiring Token...");
+//        AuthenticationToken at = new AuthenticationToken(new File("/home/chung/toxotisKeys/my.key"));
 //        System.out.println("Done!");
 //        System.out.println("Authentication Token : \n" + at);
 //        System.out.println("User:\n" + at.getUser());
@@ -90,13 +93,13 @@ public class Persist {
 //        RegisterTool.storeDataset(d, session);
 //        System.out.println("Dataset registered successfully!\n");
 //
-        System.out.println("Loading Model");
-        Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote(at);
-        model.setActualModel(new java.net.URI("http://in.gr/#asdf"));
-        System.out.println("Model Loaded");
-        System.out.println("Storing Model");
-        RegisterTool.storeModel(model, session);
-        System.out.println("Model registered successfully!\n");
+//        System.out.println("Loading Model");
+//        Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote(at);
+//        model.setActualModel(new java.net.URI("http://in.gr/#asdf"));
+//        System.out.println("Model Loaded");
+//        System.out.println("Storing Model");
+//        RegisterTool.storeModel(model, session);
+//        System.out.println("Model registered successfully!\n");
 
         
 //
@@ -112,10 +115,10 @@ public class Persist {
 //        System.out.println("Task #2 registered successfully!");
 //        System.out.println();
 
-        BibTeX b = new BibTeX(Services.ntua().augment("bibtex","1"));
-        b.setAnnotation("asdf");
-        b.setAuthor("gdfgfdg");
-        RegisterTool.storeBibTeX(session, b);
+//        BibTeX b = new BibTeX(Services.ntua().augment("bibtex","1"));
+//        b.setAnnotation("asdf");
+//        b.setAuthor("gdfgfdg");
+//        RegisterTool.storeBibTeX(session, b);
         /*
          * For more info about criteria read:
          * http://docs.jboss.org/hibernate/core/3.3/reference/en/html/querycriteria.html
