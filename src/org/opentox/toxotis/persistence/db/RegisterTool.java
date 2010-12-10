@@ -4,10 +4,9 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.StaleObjectStateException;
 import org.opentox.toxotis.core.OTComponent;
 import org.opentox.toxotis.core.component.*;
-import org.opentox.toxotis.ontology.LiteralValue;
-import org.opentox.toxotis.ontology.MetaInfo;
 import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.ontology.collection.OTAlgorithmTypes;
 import org.opentox.toxotis.ontology.collection.OTClasses;
@@ -15,36 +14,65 @@ import org.opentox.toxotis.ontology.impl.OntologicalClassImpl;
 import org.opentox.toxotis.util.aa.User;
 
 /**
+ * Class with static methods useful for storing objects in the database. Note that
+ * none of the methods closes the session but all do clear it after use, so it's up
+ * to you to invoke close() whenever you consider it is necessary.
  *
  * @author Pantelis Sopasakis
  * @author Charalampos Chomenides
  */
 public class RegisterTool {
 
+    private static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(RegisterTool.class);
+
     private static void preprocessComponent(OTComponent component) {
         component.getUri().clearToken();
     }
 
     public static void storeUser(User user, Session session) {
-        session.beginTransaction();
-        session.saveOrUpdate(user);
-        session.getTransaction().commit();
-        session.clear();
+        try {
+            session.beginTransaction();
+            session.saveOrUpdate(user);
+            session.getTransaction().commit();
+            session.clear();
+        } catch (RuntimeException ex) {
+            logger.warn("Storage of User failed. Logging the corresponding exception for details", ex);
+            try {
+                if (session.getTransaction().isActive()) {
+                    session.getTransaction().rollback();
+                }
+            } catch (Throwable rte) {
+                logger.error("Cannot rollback", rte);
+            }
+            throw ex;
+        }
     }
 
     public static void storeAlgorithm(Algorithm algorithm, Session session) {
-        session.beginTransaction();
-        preprocessComponent(algorithm);
-        for (Parameter p : algorithm.getParameters()) {
-            session.saveOrUpdate(p);
+        try {
+            session.beginTransaction();
+            preprocessComponent(algorithm);
+            for (Parameter p : algorithm.getParameters()) {
+                session.saveOrUpdate(p);
+                session.flush();
+                session.evict(p);
+            }
+            session.saveOrUpdate(algorithm);
             session.flush();
-            session.evict(p);
+            session.evict(algorithm);
+            session.getTransaction().commit();
+            session.clear();
+        } catch (RuntimeException ex) {
+            logger.warn("Storage of User failed. Logging the corresponding exception for details", ex);
+            try {
+                if (session.getTransaction().isActive()) {
+                    session.getTransaction().rollback();
+                }
+            } catch (Throwable rte) {
+                logger.error("Cannot rollback", rte);
+            }
+            throw ex;
         }
-        session.saveOrUpdate(algorithm);
-        session.flush();
-        session.evict(algorithm);
-        session.getTransaction().commit();
-        session.clear();
     }
 
     public static void storeModel(Model model, Session session) {
@@ -92,97 +120,172 @@ public class RegisterTool {
             session.saveOrUpdate(model);
             session.getTransaction().commit();
             session.clear();
-        } catch (HibernateException ex) {
-            Logger.getLogger(RegisterTool.class).warn("Cannot Store Model", ex);
+        } catch (StaleObjectStateException ex) {
+            logger.error("Serious exception that cannot be recovered! Stale Object!!!!");
+            try {
+                if (session.getTransaction().isActive()) {
+                    session.getTransaction().rollback();
+                }
+            } catch (Throwable rte) {
+                logger.error("Cannot rollback", rte);
+            }
+            throw ex;
+        } catch (RuntimeException ex) {
+            logger.warn("Storage of User failed. Logging the corresponding exception for details", ex);
+            try {
+                if (session.getTransaction().isActive()) {
+                    session.getTransaction().rollback();
+                }
+            } catch (Throwable rte) {
+                logger.error("Cannot rollback", rte);
+            }
             throw ex;
         }
     }
 
     public static void storeDataset(Dataset dataset, Session session) {
-        preprocessComponent(dataset);
-        session.beginTransaction();
-        for (Feature f : dataset.getContainedFeatures()) {
-            session.saveOrUpdate(f);
-            session.flush();
-            session.evict(f);
-        }
-        session.getTransaction().commit();
-        session.clear();
+        try {
+            preprocessComponent(dataset);
+            session.beginTransaction();
+            for (Feature f : dataset.getContainedFeatures()) {
+                session.saveOrUpdate(f);
+                session.flush();
+                session.evict(f);
+            }
+            session.getTransaction().commit();
+            session.clear();
 
-        session.beginTransaction();
-        Set<FeatureValue> ff = dataset.getFeatureValues();
-        for (FeatureValue p : ff) {
-            session.saveOrUpdate(p);
-            session.flush();
-            session.evict(p);
+            session.beginTransaction();
+            Set<FeatureValue> ff = dataset.getFeatureValues();
+            for (FeatureValue p : ff) {
+                session.saveOrUpdate(p);
+                session.flush();
+                session.evict(p);
+            }
+            session.saveOrUpdate(dataset);
+            session.getTransaction().commit();
+            session.clear();
+        } catch (StaleObjectStateException ex) {
+            logger.error("Serious exception that cannot be recovered! Stale Object!!!!");
+            try {
+                if (session.getTransaction().isActive()) {
+                    session.getTransaction().rollback();
+                }
+            } catch (Throwable rte) {
+                logger.error("Cannot rollback", rte);
+            }
+            throw ex;
+        } catch (RuntimeException ex) {
+            logger.warn("Storage of User failed. Logging the corresponding exception for details", ex);
+            try {
+                if (session.getTransaction().isActive()) {
+                    session.getTransaction().rollback();
+                }
+            } catch (Throwable rte) {
+                logger.error("Cannot rollback", rte);
+            }
+            throw ex;
         }
-        session.saveOrUpdate(dataset);
-        session.getTransaction().commit();
-        session.clear();
     }
 
     public static void storeTask(Session session, Task task) {
-        preprocessComponent(task);
-        session.beginTransaction();
-        User createdBy = task.getCreatedBy();
-        if (createdBy != null) {
-            session.saveOrUpdate(createdBy);
+        try {
+            preprocessComponent(task);
+            session.beginTransaction();
+            User createdBy = task.getCreatedBy();
+            if (createdBy != null) {
+                session.saveOrUpdate(createdBy);
+            }
+            ErrorReport er = task.getErrorReport();
+            if (er != null) {
+                session.saveOrUpdate(er);
+                session.flush();
+                session.evict(er);
+            }
+            session.saveOrUpdate(task);
+            session.getTransaction().commit();
+            session.clear();
+        } catch (RuntimeException ex) {
+            logger.warn("Storage of User failed. Logging the corresponding exception for details", ex);
+            try {
+                if (session.getTransaction().isActive()) {
+                    session.getTransaction().rollback();
+                }
+            } catch (Throwable rte) {
+                logger.error("Cannot rollback", rte);
+            }
+            throw ex;
         }
-        ErrorReport er = task.getErrorReport();
-        if (er != null) {
-            session.saveOrUpdate(er);
-            session.flush();
-            session.evict(er);
-        }
-        session.saveOrUpdate(task);
-        session.getTransaction().commit();
-        session.clear();
     }
 
     public static void storeAllOntClasses(Session session) {
-        session.beginTransaction();
-        for (OntologicalClass oc : OTClasses.getAll()) {
-            OntologicalClassImpl occ = new OntologicalClassImpl();
-            occ.setMetaInfo(oc.getMetaInfo());
-            occ.setName(oc.getName());
-            occ.setNameSpace(oc.getNameSpace());
-            session.saveOrUpdate(occ);
-        }
-        for (OntologicalClass oc : OTAlgorithmTypes.getAll()) {
-            if (!oc.getName().equals("Thing")) {
+        try {
+            session.beginTransaction();
+            for (OntologicalClass oc : OTClasses.getAll()) {
                 OntologicalClassImpl occ = new OntologicalClassImpl();
                 occ.setMetaInfo(oc.getMetaInfo());
                 occ.setName(oc.getName());
                 occ.setNameSpace(oc.getNameSpace());
                 session.saveOrUpdate(occ);
             }
-        }
-        session.getTransaction().commit();
-        session.clear();
+            for (OntologicalClass oc : OTAlgorithmTypes.getAll()) {
+                if (!oc.getName().equals("Thing")) {
+                    OntologicalClassImpl occ = new OntologicalClassImpl();
+                    occ.setMetaInfo(oc.getMetaInfo());
+                    occ.setName(oc.getName());
+                    occ.setNameSpace(oc.getNameSpace());
+                    session.saveOrUpdate(occ);
+                }
+            }
+            session.getTransaction().commit();
+            session.clear();
 
-        session.beginTransaction();
-        for (OntologicalClass oc : OTClasses.getAll()) {
-            session.saveOrUpdate(oc);
-        }
-        for (OntologicalClass oc : OTAlgorithmTypes.getAll()) {
-            if (!oc.getName().equals("Thing")) {
+            session.beginTransaction();
+            for (OntologicalClass oc : OTClasses.getAll()) {
                 session.saveOrUpdate(oc);
             }
+            for (OntologicalClass oc : OTAlgorithmTypes.getAll()) {
+                if (!oc.getName().equals("Thing")) {
+                    session.saveOrUpdate(oc);
+                }
+            }
+            session.getTransaction().commit();
+            session.clear();
+        } catch (RuntimeException ex) {
+            logger.warn("Storage of User failed. Logging the corresponding exception for details", ex);
+            try {
+                if (session.getTransaction().isActive()) {
+                    session.getTransaction().rollback();
+                }
+            } catch (Throwable rte) {
+                logger.error("Cannot rollback", rte);
+            }
+            throw ex;
         }
-        session.getTransaction().commit();
-        session.clear();
     }
 
     public static void storeBibTeX(Session session, BibTeX bibtex) {
-        preprocessComponent(bibtex);
+        try {
+            preprocessComponent(bibtex);
 
-        session.beginTransaction();
-        User createdBy = bibtex.getCreatedBy();
-        if (createdBy != null) {
-            session.saveOrUpdate(createdBy);
+            session.beginTransaction();
+            User createdBy = bibtex.getCreatedBy();
+            if (createdBy != null) {
+                session.saveOrUpdate(createdBy);
+            }
+            session.saveOrUpdate(bibtex);
+            session.getTransaction().commit();
+            session.clear();
+        } catch (RuntimeException ex) {
+            logger.warn("Storage of User failed. Logging the corresponding exception for details", ex);
+            try {
+                if (session.getTransaction().isActive()) {
+                    session.getTransaction().rollback();
+                }
+            } catch (Throwable rte) {
+                logger.error("Cannot rollback", rte);
+            }
+            throw ex;
         }
-        session.saveOrUpdate(bibtex);
-        session.getTransaction().commit();
-        session.clear();
     }
 }
