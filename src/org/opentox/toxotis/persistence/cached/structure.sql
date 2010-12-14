@@ -99,12 +99,14 @@ CREATE TABLE `BibTeX` (
   `url` varchar(255) DEFAULT NULL,
   `volume` int(11) DEFAULT NULL,
   `year` int(11) DEFAULT NULL,
+  `createdBy` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`uri`),
   KEY `FK7695512CB5362BBC` (`uri`),
+  KEY `FK7695512CA2493D53` (`createdBy`),
+  CONSTRAINT `FK7695512CA2493D53` FOREIGN KEY (`createdBy`) REFERENCES `User` (`uid`),
   CONSTRAINT `FK7695512CB5362BBC` FOREIGN KEY (`uri`) REFERENCES `OTComponent` (`uri`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 
 --
 -- Table structure for table `Compound`
@@ -177,7 +179,6 @@ CREATE TABLE `Dataset` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
 --
 -- Table structure for table `ErrorReport`
 --
@@ -236,9 +237,8 @@ CREATE TABLE `FeatOntol` (
   KEY `FK5C48ACE0D53F8953` (`featureUri`),
   CONSTRAINT `featureOntology` FOREIGN KEY (`DATATYPE_NS`, `DATATYPE_Name`) REFERENCES `OntologicalClass` (`nameSpace`, `name`),
   CONSTRAINT `FK5C48ACE0D53F8953` FOREIGN KEY (`featureUri`) REFERENCES `Feature` (`uri`)
-) ENGINE=InnoDB AUTO_INCREMENT=562 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 
 --
 -- Table structure for table `Feature`
@@ -277,7 +277,6 @@ CREATE TABLE `FeatureValue` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
 --
 -- Table structure for table `Literal`
 --
@@ -293,7 +292,6 @@ CREATE TABLE `Literal` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
 --
 -- Table structure for table `MetaInfo`
 --
@@ -308,9 +306,8 @@ CREATE TABLE `MetaInfo` (
   PRIMARY KEY (`idx`),
   KEY `FKE8FBC87372A0A07B` (`dateLiteral`),
   CONSTRAINT `FKE8FBC87372A0A07B` FOREIGN KEY (`dateLiteral`) REFERENCES `Literal` (`hash`)
-) ENGINE=InnoDB AUTO_INCREMENT=5659 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10427 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 
 --
 -- Table structure for table `MiAud`
@@ -347,7 +344,6 @@ CREATE TABLE `MiComments` (
   CONSTRAINT `FK2A1ACFD0CCE09048` FOREIGN KEY (`idx`) REFERENCES `MetaInfo` (`idx`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 
 --
 -- Table structure for table `MiContributors`
@@ -421,7 +417,6 @@ CREATE TABLE `MiIDs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
 --
 -- Table structure for table `MiPublishers`
 --
@@ -457,7 +452,6 @@ CREATE TABLE `MiSameAs` (
   CONSTRAINT `FK84550014CCE09048` FOREIGN KEY (`idx`) REFERENCES `MetaInfo` (`idx`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 
 --
 -- Table structure for table `MiSeeAlso`
@@ -495,6 +489,9 @@ CREATE TABLE `MiSources` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `MiSubjects`
+--
 
 DROP TABLE IF EXISTS `MiSubjects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -509,7 +506,6 @@ CREATE TABLE `MiSubjects` (
   CONSTRAINT `FKD2A342A3CCE09048` FOREIGN KEY (`idx`) REFERENCES `MetaInfo` (`idx`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 
 --
 -- Table structure for table `MiTitles`
@@ -544,7 +540,9 @@ CREATE TABLE `Model` (
   `algorithm` varchar(255) DEFAULT NULL,
   `localCode` varchar(255) DEFAULT NULL,
   `dataset` varchar(255) DEFAULT NULL,
+  `modData` longblob,
   PRIMARY KEY (`uri`),
+  UNIQUE KEY `localCode` (`localCode`),
   KEY `FK4710B096E2C4AC5` (`algorithm`),
   KEY `uri_in_model` (`uri`),
   KEY `FK4710B09BF370DB4` (`dependentFeature`),
@@ -558,6 +556,9 @@ CREATE TABLE `Model` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `ModelIndepFeatures`
+--
 
 DROP TABLE IF EXISTS `ModelIndepFeatures`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -565,10 +566,11 @@ DROP TABLE IF EXISTS `ModelIndepFeatures`;
 CREATE TABLE `ModelIndepFeatures` (
   `modelUri` varchar(255) NOT NULL,
   `featureUri` varchar(255) NOT NULL,
-  PRIMARY KEY (`modelUri`,`featureUri`),
+  `indepFeature_idx` int(11) NOT NULL,
+  PRIMARY KEY (`modelUri`,`indepFeature_idx`),
   KEY `modelUri_ref_for_independentParameters` (`modelUri`),
-  KEY `featureUri_ref_for_model` (`featureUri`),
-  CONSTRAINT `featureUri_ref_for_model` FOREIGN KEY (`featureUri`) REFERENCES `Feature` (`uri`),
+  KEY `indepFeatureUri_ref_for_model` (`featureUri`),
+  CONSTRAINT `indepFeatureUri_ref_for_model` FOREIGN KEY (`featureUri`) REFERENCES `Feature` (`uri`),
   CONSTRAINT `modelUri_ref_for_independentParameters` FOREIGN KEY (`modelUri`) REFERENCES `Model` (`uri`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -591,7 +593,6 @@ CREATE TABLE `ModelParams` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
 --
 -- Table structure for table `OTComponent`
 --
@@ -609,10 +610,6 @@ CREATE TABLE `OTComponent` (
   CONSTRAINT `FK3EAD8498CD120F90` FOREIGN KEY (`meta`) REFERENCES `MetaInfo` (`idx`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `OTComponent`
---
 
 --
 -- Table structure for table `OntologicalClass`
@@ -751,7 +748,7 @@ CREATE TABLE `User` (
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
@@ -761,4 +758,4 @@ CREATE TABLE `User` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-12-01  0:31:20
+-- Dump completed on 2010-12-14  3:02:54
