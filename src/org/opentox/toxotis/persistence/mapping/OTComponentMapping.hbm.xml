@@ -23,8 +23,7 @@
             <property name="bookTitle"/>
             <property name="chapter"/>
             <property name="copyright"/>
-            <!-- READ http://docs.jboss.org/tools/2.1.0.Beta1/hibernatetools/html_single/#d0e4159
-                 for further information about the tag <meta>.
+            <!-- READ http://cut.gd/qDek for further information about the tag <meta>.
                  -->
             <property name="crossref">
                 <meta attribute="field-description">
@@ -77,6 +76,9 @@
                 <many-to-many class="org.opentox.toxotis.ontology.LiteralValue"/>
             </set>
         </joined-subclass>
+        <!--
+                FeatureValue extends OTComponent
+        -->
         <joined-subclass name="org.opentox.toxotis.core.component.FeatureValue" table="FeatureValue">
             <key column="uri" on-delete="cascade"/>
             <many-to-one cascade="delete" class="org.opentox.toxotis.core.component.Feature" foreign-key="feature_in_featureValue" name="feature"/>
@@ -120,9 +122,15 @@
                 </many-to-many>
             </set>
         </joined-subclass>
+        <!--
+                Compound extends OTComponent
+        -->
         <joined-subclass name="org.opentox.toxotis.core.component.Compound" table="Compound">
             <key column="uri" foreign-key="uri_in_compound" on-delete="cascade"/>
         </joined-subclass>
+        <!--
+                DataEntry extends OTComponent
+        -->
         <joined-subclass name="org.opentox.toxotis.core.component.DataEntry" table="DataEntry">
             <key column="uri" foreign-key="uri_in_dataEntry" on-delete="cascade"/>
             <many-to-one cascade="all" class="org.opentox.toxotis.core.component.Compound" name="conformer"/>
@@ -140,6 +148,9 @@
                 <one-to-many class="org.opentox.toxotis.core.component.DataEntry"/>
             </list>
         </joined-subclass>
+        <!--
+                Model extends OTComponent
+        -->
         <joined-subclass name="org.opentox.toxotis.core.component.Model">
             <key column="uri" foreign-key="uri_in_model" on-delete="cascade"/>
             <set cascade="delete" name="parameters" table="ModelParams">
