@@ -11,7 +11,7 @@ import org.opentox.toxotis.ontology.OntologicalClass;
 import org.opentox.toxotis.ontology.collection.OTAlgorithmTypes;
 import org.opentox.toxotis.ontology.collection.OTClasses;
 import org.opentox.toxotis.ontology.impl.OntologicalClassImpl;
-import org.opentox.toxotis.util.aa.User;
+import org.opentox.toxotis.core.component.User;
 
 /**
  * Class with static methods useful for storing objects in the database. Note that

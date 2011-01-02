@@ -44,7 +44,7 @@
             <property name="url"/>
             <property name="volume"/>
             <property name="year"/>
-            <many-to-one class="org.opentox.toxotis.util.aa.User" name="createdBy"/>
+            <many-to-one class="org.opentox.toxotis.core.component.User" name="createdBy"/>
         </joined-subclass>
         <!--
             ErrorReport extends Component
@@ -102,8 +102,9 @@
             <property name="httpStatus" precision="1" type="float"/>
             <property name="percentageCompleted" precision="2" type="float"/>
             <property name="status" type="org.opentox.toxotis.persistence.usertypes.TaskStatusUserType"/>
+            <property name="duration" type="long"/>
             <many-to-one cascade="all" class="org.opentox.toxotis.core.component.ErrorReport" foreign-key="errReport_in_task" name="errorReport"/>
-            <many-to-one class="org.opentox.toxotis.util.aa.User" name="createdBy"/>
+            <many-to-one class="org.opentox.toxotis.core.component.User" name="createdBy"/>
         </joined-subclass>
         <!--
             Algorithm extends OTComponent
@@ -162,7 +163,7 @@
                 <index column="indepFeature_idx" type="integer"/>
                 <many-to-many class="org.opentox.toxotis.core.component.Feature" column="featureUri" foreign-key="indepFeatureUri_ref_for_model"/>
             </list>
-            <many-to-one class="org.opentox.toxotis.util.aa.User" name="createdBy"/>
+            <many-to-one class="org.opentox.toxotis.core.component.User" name="createdBy"/>
             <many-to-one cascade="delete" class="org.opentox.toxotis.core.component.Feature" name="dependentFeature"/>
             <many-to-one cascade="delete" class="org.opentox.toxotis.core.component.Feature" name="predictedFeature"/>
             <many-to-one cascade="delete" class="org.opentox.toxotis.core.component.Algorithm" name="algorithm"/>
@@ -171,4 +172,9 @@
             <property name="blob" column="modData" type="blob"/>
         </joined-subclass>
     </class>
+
+    <!--
+            User extends OTOnlineResource
+            Mapped in UserMapping.hbm.xml
+    -->
 </hibernate-mapping>
