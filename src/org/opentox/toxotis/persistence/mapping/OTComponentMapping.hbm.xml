@@ -4,7 +4,7 @@
     <!-- OTComponent container class -->
     <class discriminator-value="OTComp" dynamic-insert="true" dynamic-update="true" mutable="true" name="org.opentox.toxotis.core.OTComponent" optimistic-lock="version" polymorphism="implicit" select-before-update="false">
         <id name="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
-        <property name="enabled" type="boolean"/>
+        <property name="enabled" type="true_false"/>
         <!--    Foreign (M2O) key pointing to MetaInformation
                 Question: is unique="true" correct here???
         -->
