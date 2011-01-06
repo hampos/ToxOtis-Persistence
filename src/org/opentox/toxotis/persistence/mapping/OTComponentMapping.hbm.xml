@@ -4,6 +4,7 @@
     <!-- OTComponent container class -->
     <class discriminator-value="OTComp" dynamic-insert="true" dynamic-update="true" mutable="true" name="org.opentox.toxotis.core.OTComponent" optimistic-lock="version" polymorphism="implicit" select-before-update="false">
         <id name="uri" type="org.opentox.toxotis.persistence.usertypes.VRIUserType"/>
+        <property name="enabled" type="boolean"/>
         <!--    Foreign (M2O) key pointing to MetaInformation
                 Question: is unique="true" correct here???
         -->
@@ -64,7 +65,7 @@
         <joined-subclass name="org.opentox.toxotis.core.component.Feature" table="Feature">
             <key column="uri" foreign-key="uri_in_feature" on-delete="cascade"/>
             <property length="50" name="units" type="string"/>
-            <set cascade="delete" name="ontologies" table="FeatOntol">
+            <set cascade="delete" name="ontologicalClasses" table="FeatOntol">
                 <key column="featureUri"/>
                 <many-to-many class="org.opentox.toxotis.ontology.OntologicalClass" foreign-key="featureOntology">
                     <column name="DATATYPE_NS"/>

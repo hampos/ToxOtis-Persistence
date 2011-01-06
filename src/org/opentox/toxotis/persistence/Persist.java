@@ -13,6 +13,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.opentox.toxotis.client.VRI;
 import org.opentox.toxotis.client.collection.Services;
 import org.opentox.toxotis.core.component.Algorithm;
 import org.opentox.toxotis.core.component.BibTeX;
@@ -20,6 +21,8 @@ import org.opentox.toxotis.core.component.Dataset;
 import org.opentox.toxotis.core.component.Model;
 import org.opentox.toxotis.core.component.Parameter;
 import org.opentox.toxotis.core.component.Task;
+import org.opentox.toxotis.ontology.collection.OTAlgorithmTypes;
+import org.opentox.toxotis.ontology.collection.OTClasses;
 import org.opentox.toxotis.persistence.db.DeleteTool;
 import org.opentox.toxotis.persistence.db.RegisterTool;
 import org.opentox.toxotis.persistence.util.HibernateUtil;
@@ -73,11 +76,11 @@ public class Persist {
         RegisterTool.storeAllOntClasses(session);
         System.out.println("Ontological Classes stored successfully!\n");
 //
-//        System.out.println("Acquiring Token...");
-//        AuthenticationToken at = new AuthenticationToken(new File("/home/chung/toxotisKeys/my.key"));
-//        System.out.println("Done!");
-//        System.out.println("Authentication Token : \n" + at);
-//        System.out.println("User:\n" + at.getUser());
+        System.out.println("Acquiring Token...");
+        AuthenticationToken at = new AuthenticationToken(new File("/home/chung/toxotisKeys/my.key"));
+        System.out.println("Done!");
+        System.out.println("Authentication Token : \n" + at);
+        System.out.println("User:\n" + at.getUser());
 //
 //        System.out.println("Loading Algorithm");
 //        Algorithm algorithm = new Algorithm(Services.ntua().augment("algorithm", "svm")).loadFromRemote(at);
@@ -86,20 +89,20 @@ public class Persist {
 //        RegisterTool.storeAlgorithm(algorithm, session);
 //        System.out.println("Algorithm registered successfully!\n");
 //
-        System.out.println("Loading Dataset");
-        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "9").addUrlParameter("max", "50")).loadFromRemote();
-        System.out.println("Dataset Loaded");
-        System.out.println("Storing Dataset");
-        RegisterTool.storeDataset(d, session);
-        System.out.println("Dataset registered successfully!\n");
+//        System.out.println("Loading Dataset");
+//        Dataset d = new Dataset(Services.ideaconsult().augment("dataset", "9").addUrlParameter("max", "50")).loadFromRemote();
+//        System.out.println("Dataset Loaded");
+//        System.out.println("Storing Dataset");
+//        RegisterTool.storeDataset(d, session);
+//        System.out.println("Dataset registered successfully!\n");
 //
-        System.out.println("Loading Model");
-        Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote();
-        model.setActualModel(new java.net.URI("http://in.gr/#asdf"));
-        System.out.println("Model Loaded");
-        System.out.println("Storing Model");
-        RegisterTool.storeModel(model, session);
-        System.out.println("Model registered successfully!\n");
+//        System.out.println("Loading Model");
+//        Model model = new Model(Services.ntua().augment("model", "934ef1d0-2080-48eb-9f65-f61b830b5783")).loadFromRemote();
+//        model.setActualModel(new java.net.URI("http://in.gr/#asdf"));
+//        System.out.println("Model Loaded");
+//        System.out.println("Storing Model");
+//        RegisterTool.storeModel(model, session);
+//        System.out.println("Model registered successfully!\n");
 
         
 //
@@ -122,14 +125,16 @@ public class Persist {
         /*
          * For more info about criteria read:
          * http://docs.jboss.org/hibernate/core/3.3/reference/en/html/querycriteria.html
-         */        
-        List resultsFoundInDB = session.createCriteria(Model.class).list();
+         */
+        System.out.println(OTClasses.Algorithm());
+        List resultsFoundInDB = session.createCriteria(Task.class).add(Restrictions.eq("uri", "http://localhost:3000/task/dac56a96-7627-4cd6-9dda-c11083078ccb")).list();
 //                add(Restrictions.like("uri", "%svm")).list();
         System.out.println("found " + resultsFoundInDB.size());
         for (Object o : resultsFoundInDB) {
-            Model mdl = (Model) o;
-            URI c = (URI)mdl.getActualModel();
+            Task t = (Task) o;
+            VRI c = t.getUri();
             System.out.println(c);
+            System.out.println(t.getMeta().getHasSources());
         }
         session.close();
 

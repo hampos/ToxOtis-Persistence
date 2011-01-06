@@ -206,7 +206,7 @@ public class RegisterTool {
             session.getTransaction().commit();
             session.clear();
         } catch (RuntimeException ex) {
-            logger.warn("Storage of User failed. Logging the corresponding exception for details", ex);
+            logger.warn("Storage of Task failed. Logging the corresponding exception for details", ex);
             try {
                 if (session.getTransaction().isActive()) {
                     session.getTransaction().rollback();
