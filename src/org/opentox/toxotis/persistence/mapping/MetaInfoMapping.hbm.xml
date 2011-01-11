@@ -23,6 +23,14 @@
         <column name="litId"/>
       </many-to-many>
     </set>
+    <set cascade="all" name="rights" table="MiRights">
+      <key>
+        <column name="idx"/>
+      </key>
+      <many-to-many class="org.opentox.toxotis.ontology.LiteralValue">
+        <column name="litId"/>
+      </many-to-many>
+    </set>
     <set cascade="all" name="descriptions" table="MiDesc">
       <key>
         <column name="idx"/>
